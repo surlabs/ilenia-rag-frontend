@@ -38,8 +38,8 @@ export default function Header() {
 			<div className="flex items-center gap-2">
 				<ModeToggle />
 				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" size="sm" className="gap-1.5 text-xs font-medium">
+				<DropdownMenuTrigger asChild>
+						<Button variant="ghost" size="sm" className="gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-200">
 							<span className="uppercase">ES</span>
 							<ChevronDown className="h-3 w-3 opacity-50" />
 						</Button>

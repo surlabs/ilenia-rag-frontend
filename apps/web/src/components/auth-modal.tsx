@@ -1,0 +1,292 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { MessageSquare } from "lucide-react";
+import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
+import z from "zod";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
+
+type AuthMode = "signIn" | "signUp";
+
+interface AuthModalProps {
+  trigger?: React.ReactNode;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps) {
+  const [mode, setMode] = useState<AuthMode>("signIn");
+  const [open, setOpen] = useState(defaultOpen ?? false);
+  const router = useRouter();
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    onOpenChange?.(newOpen);
+  };
+
+  const signInForm = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: async ({ value }) => {
+      await authClient.signIn.email(
+        {
+          email: value.email,
+          password: value.password,
+        },
+        {
+          onSuccess: () => {
+            handleOpenChange(false);
+            router.push("/chat");
+            toast.success("Sesión iniciada correctamente");
+          },
+          onError: (error) => {
+            toast.error(error.error.message || "Error al iniciar sesión");
+          },
+        }
+      );
+    },
+    validators: {
+      onSubmit: z.object({
+        email: z.email("Email inválido"),
+        password: z.string().min(8, "Mínimo 8 caracteres"),
+      }),
+    },
+  });
+
+  const signUpForm = useForm({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    onSubmit: async ({ value }) => {
+      await authClient.signUp.email(
+        {
+          name: value.name,
+          email: value.email,
+          password: value.password,
+        },
+        {
+          onSuccess: () => {
+            handleOpenChange(false);
+            router.push("/chat");
+            toast.success("Cuenta creada correctamente");
+          },
+          onError: (error) => {
+            toast.error(error.error.message || "Error al crear cuenta");
+          },
+        }
+      );
+    },
+    validators: {
+      onSubmit: z.object({
+        name: z.string().min(2, "Mínimo 2 caracteres"),
+        email: z.email("Email inválido"),
+        password: z.string().min(8, "Mínimo 8 caracteres"),
+      }),
+    },
+  });
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader className="text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-sky-600 text-white shadow-lg shadow-sky-500/30">
+            <MessageSquare className="h-6 w-6" />
+          </div>
+          <DialogTitle className="text-2xl">
+            {mode === "signIn" ? "Bienvenido a ILENIA" : "Crear cuenta"}
+          </DialogTitle>
+          <DialogDescription>
+            {mode === "signIn"
+              ? "Accede con tus credenciales"
+              : "Regístrate para comenzar"}
+          </DialogDescription>
+        </DialogHeader>
+
+        {mode === "signIn" ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              signInForm.handleSubmit();
+            }}
+            className="space-y-4"
+          >
+            <signInForm.Field name="email">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Email</Label>
+                  <Input
+                    id={field.name}
+                    type="email"
+                    placeholder="usuario@ejemplo.com"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <p key={error?.message} className="text-xs text-red-500">
+                      {error?.message}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </signInForm.Field>
+
+            <signInForm.Field name="password">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Contraseña</Label>
+                  <Input
+                    id={field.name}
+                    type="password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <p key={error?.message} className="text-xs text-red-500">
+                      {error?.message}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </signInForm.Field>
+
+            <signInForm.Subscribe>
+              {(state) => (
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!state.canSubmit || state.isSubmitting}
+                >
+                  {state.isSubmitting ? "Iniciando..." : "Iniciar Sesión"}
+                </Button>
+              )}
+            </signInForm.Subscribe>
+
+            <p className="text-center text-sm text-muted-foreground">
+              ¿No tienes cuenta?{" "}
+              <button
+                type="button"
+                onClick={() => setMode("signUp")}
+                className="text-sky-600 hover:underline"
+              >
+                Regístrate
+              </button>
+            </p>
+          </form>
+        ) : (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              signUpForm.handleSubmit();
+            }}
+            className="space-y-4"
+          >
+            <signUpForm.Field name="name">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Nombre</Label>
+                  <Input
+                    id={field.name}
+                    placeholder="Tu nombre"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <p key={error?.message} className="text-xs text-red-500">
+                      {error?.message}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </signUpForm.Field>
+
+            <signUpForm.Field name="email">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Email</Label>
+                  <Input
+                    id={field.name}
+                    type="email"
+                    placeholder="usuario@ejemplo.com"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <p key={error?.message} className="text-xs text-red-500">
+                      {error?.message}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </signUpForm.Field>
+
+            <signUpForm.Field name="password">
+              {(field) => (
+                <div className="space-y-2">
+                  <Label htmlFor={field.name}>Contraseña</Label>
+                  <Input
+                    id={field.name}
+                    type="password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.map((error) => (
+                    <p key={error?.message} className="text-xs text-red-500">
+                      {error?.message}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </signUpForm.Field>
+
+            <signUpForm.Subscribe>
+              {(state) => (
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!state.canSubmit || state.isSubmitting}
+                >
+                  {state.isSubmitting ? "Creando..." : "Crear Cuenta"}
+                </Button>
+              )}
+            </signUpForm.Subscribe>
+
+            <p className="text-center text-sm text-muted-foreground">
+              ¿Ya tienes cuenta?{" "}
+              <button
+                type="button"
+                onClick={() => setMode("signIn")}
+                className="text-sky-600 hover:underline"
+              >
+                Inicia sesión
+              </button>
+            </p>
+          </form>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

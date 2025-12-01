@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../index.css";
 import Providers from "@/components/providers";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/app-sidebar";
 import Header from "@/components/header";
 
 const geistSans = Geist({
@@ -15,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "ilenia-rag-frontend",
-	description: "ilenia-rag-frontend",
+	title: "ILENIA Chat",
+	description: "Interfaz de chat RAG multilingüe del proyecto ILENIA",
 };
 
 export default function RootLayout({
@@ -25,15 +27,20 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="es" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<Providers>
-					<div className="grid grid-rows-[auto_1fr] h-svh">
-						<Header />
-						{children}
-					</div>
+					<SidebarProvider>
+						<AppSidebar />
+						<SidebarInset>
+							<Header />
+							<main className="flex-1 overflow-auto">
+								{children}
+							</main>
+						</SidebarInset>
+					</SidebarProvider>
 				</Providers>
 			</body>
 		</html>

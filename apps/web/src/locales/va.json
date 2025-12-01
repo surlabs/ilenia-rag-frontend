@@ -1,0 +1,45 @@
+{
+  "common": {
+    "chats": "Xats",
+    "newChat": "Nou xat",
+    "appName": "ILENIA Xat",
+    "settings": "Configuració",
+    "signOut": "Tancar sessió",
+    "signIn": "Iniciar sessió"
+  },
+  "sidebar": {
+    "today": "Hui",
+    "yesterday": "Ahir",
+    "loginToSeeHistory": "Inicia sessió per a veure el teu historial"
+  },
+  "theme": {
+    "toggle": "Canviar tema",
+    "light": "Clar",
+    "dark": "Fosc",
+    "system": "Sistema"
+  },
+  "auth": {
+    "welcomeTitle": "Benvingut a ILENIA",
+    "createAccount": "Crear compte",
+    "signInDescription": "Accedeix amb les teues credencials",
+    "signUpDescription": "Registra't per a començar",
+    "email": "Correu electrònic",
+    "password": "Contrasenya",
+    "name": "Nom",
+    "invalidEmail": "Correu electrònic invàlid",
+    "minChars8": "Mínim 8 caràcters",
+    "minChars2": "Mínim 2 caràcters",
+    "signingIn": "Iniciant...",
+    "signInButton": "Iniciar sessió",
+    "noAccount": "No tens compte?",
+    "register": "Registra't",
+    "creating": "Creant...",
+    "createAccountButton": "Crear compte",
+    "hasAccount": "Ja tens compte?",
+    "signInLink": "Inicia sessió",
+    "signInSuccess": "Sessió iniciada correctament",
+    "signInError": "Error en iniciar sessió",
+    "signUpSuccess": "Compte creat correctament",
+    "signUpError": "Error en crear compte"
+  }
+}

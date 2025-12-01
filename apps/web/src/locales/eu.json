@@ -1,0 +1,45 @@
+{
+  "common": {
+    "chats": "Txatak",
+    "newChat": "Txat berria",
+    "appName": "ILENIA Txat",
+    "settings": "Ezarpenak",
+    "signOut": "Saioa itxi",
+    "signIn": "Saioa hasi"
+  },
+  "sidebar": {
+    "today": "Gaur",
+    "yesterday": "Atzo",
+    "loginToSeeHistory": "Hasi saioa zure historia ikusteko"
+  },
+  "theme": {
+    "toggle": "Gaia aldatu",
+    "light": "Argia",
+    "dark": "Iluna",
+    "system": "Sistema"
+  },
+  "auth": {
+    "welcomeTitle": "Ongi etorri ILENIAra",
+    "createAccount": "Kontua sortu",
+    "signInDescription": "Sartu zure kredentzialekin",
+    "signUpDescription": "Erregistratu hasteko",
+    "email": "Emaila",
+    "password": "Pasahitza",
+    "name": "Izena",
+    "invalidEmail": "Email baliogabea",
+    "minChars8": "Gutxienez 8 karaktere",
+    "minChars2": "Gutxienez 2 karaktere",
+    "signingIn": "Sartzen...",
+    "signInButton": "Saioa hasi",
+    "noAccount": "Ez duzu konturik?",
+    "register": "Erregistratu",
+    "creating": "Sortzen...",
+    "createAccountButton": "Kontua sortu",
+    "hasAccount": "Badaukazu kontua?",
+    "signInLink": "Hasi saioa",
+    "signInSuccess": "Saioa ondo hasi da",
+    "signInError": "Errorea saioa hastean",
+    "signUpSuccess": "Kontua ondo sortu da",
+    "signUpError": "Errorea kontua sortzean"
+  }
+}

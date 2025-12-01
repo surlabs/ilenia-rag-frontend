@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
+import { useTranslation } from "@/providers/i18n-provider";
 
 type AuthMode = "signIn" | "signUp";
 
@@ -32,6 +33,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
   const [mode, setMode] = useState<AuthMode>("signIn");
   const [open, setOpen] = useState(defaultOpen ?? false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -53,18 +55,18 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
           onSuccess: () => {
             handleOpenChange(false);
             router.push("/chat");
-            toast.success("Sesión iniciada correctamente");
+            toast.success(t("auth.signInSuccess"));
           },
           onError: (error) => {
-            toast.error(error.error.message || "Error al iniciar sesión");
+            toast.error(error.error.message || t("auth.signInError"));
           },
         }
       );
     },
     validators: {
       onSubmit: z.object({
-        email: z.email("Email inválido"),
-        password: z.string().min(8, "Mínimo 8 caracteres"),
+        email: z.email(t("auth.invalidEmail")),
+        password: z.string().min(8, t("auth.minChars8")),
       }),
     },
   });
@@ -86,19 +88,19 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
           onSuccess: () => {
             handleOpenChange(false);
             router.push("/chat");
-            toast.success("Cuenta creada correctamente");
+            toast.success(t("auth.signUpSuccess"));
           },
           onError: (error) => {
-            toast.error(error.error.message || "Error al crear cuenta");
+            toast.error(error.error.message || t("auth.signUpError"));
           },
         }
       );
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, "Mínimo 2 caracteres"),
-        email: z.email("Email inválido"),
-        password: z.string().min(8, "Mínimo 8 caracteres"),
+        name: z.string().min(2, t("auth.minChars2")),
+        email: z.email(t("auth.invalidEmail")),
+        password: z.string().min(8, t("auth.minChars8")),
       }),
     },
   });
@@ -112,12 +114,12 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <MessageSquare className="h-6 w-6" />
           </div>
           <DialogTitle className="text-2xl">
-            {mode === "signIn" ? "Bienvenido a ILENIA" : "Crear cuenta"}
+            {mode === "signIn" ? t("auth.welcomeTitle") : t("auth.createAccount")}
           </DialogTitle>
           <DialogDescription>
             {mode === "signIn"
-              ? "Accede con tus credenciales"
-              : "Regístrate para comenzar"}
+              ? t("auth.signInDescription")
+              : t("auth.signUpDescription")}
           </DialogDescription>
         </DialogHeader>
 
@@ -132,7 +134,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <signInForm.Field name="email">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Email</Label>
+                  <Label htmlFor={field.name}>{t("auth.email")}</Label>
                   <Input
                     id={field.name}
                     type="email"
@@ -153,7 +155,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <signInForm.Field name="password">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Contraseña</Label>
+                  <Label htmlFor={field.name}>{t("auth.password")}</Label>
                   <Input
                     id={field.name}
                     type="password"
@@ -177,19 +179,19 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
                   className="w-full"
                   disabled={!state.canSubmit || state.isSubmitting}
                 >
-                  {state.isSubmitting ? "Iniciando..." : "Iniciar Sesión"}
+                  {state.isSubmitting ? t("auth.signingIn") : t("auth.signInButton")}
                 </Button>
               )}
             </signInForm.Subscribe>
 
             <p className="text-center text-sm text-muted-foreground">
-              ¿No tienes cuenta?{" "}
+              {t("auth.noAccount")}{" "}
               <button
                 type="button"
                 onClick={() => setMode("signUp")}
                 className="text-sky-600 hover:underline"
               >
-                Regístrate
+                {t("auth.register")}
               </button>
             </p>
           </form>
@@ -204,7 +206,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <signUpForm.Field name="name">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Nombre</Label>
+                  <Label htmlFor={field.name}>{t("auth.name")}</Label>
                   <Input
                     id={field.name}
                     placeholder="Tu nombre"
@@ -224,7 +226,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <signUpForm.Field name="email">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Email</Label>
+                  <Label htmlFor={field.name}>{t("auth.email")}</Label>
                   <Input
                     id={field.name}
                     type="email"
@@ -245,7 +247,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             <signUpForm.Field name="password">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Contraseña</Label>
+                  <Label htmlFor={field.name}>{t("auth.password")}</Label>
                   <Input
                     id={field.name}
                     type="password"
@@ -269,19 +271,19 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
                   className="w-full"
                   disabled={!state.canSubmit || state.isSubmitting}
                 >
-                  {state.isSubmitting ? "Creando..." : "Crear Cuenta"}
+                  {state.isSubmitting ? t("auth.creating") : t("auth.createAccountButton")}
                 </Button>
               )}
             </signUpForm.Subscribe>
 
             <p className="text-center text-sm text-muted-foreground">
-              ¿Ya tienes cuenta?{" "}
+              {t("auth.hasAccount")}{" "}
               <button
                 type="button"
                 onClick={() => setMode("signIn")}
                 className="text-sky-600 hover:underline"
               >
-                Inicia sesión
+                {t("auth.signInLink")}
               </button>
             </p>
           </form>

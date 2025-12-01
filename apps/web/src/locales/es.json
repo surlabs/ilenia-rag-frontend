@@ -1,0 +1,45 @@
+{
+  "common": {
+    "chats": "Chats",
+    "newChat": "Nuevo Chat",
+    "appName": "ILENIA Chat",
+    "settings": "Configuración",
+    "signOut": "Cerrar Sesión",
+    "signIn": "Iniciar Sesión"
+  },
+  "sidebar": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "loginToSeeHistory": "Inicia sesión para ver tu historial"
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "auth": {
+    "welcomeTitle": "Bienvenido a ILENIA",
+    "createAccount": "Crear cuenta",
+    "signInDescription": "Accede con tus credenciales",
+    "signUpDescription": "Regístrate para comenzar",
+    "email": "Email",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "invalidEmail": "Email inválido",
+    "minChars8": "Mínimo 8 caracteres",
+    "minChars2": "Mínimo 2 caracteres",
+    "signingIn": "Iniciando...",
+    "signInButton": "Iniciar Sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "register": "Regístrate",
+    "creating": "Creando...",
+    "createAccountButton": "Crear Cuenta",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "signInLink": "Inicia sesión",
+    "signInSuccess": "Sesión iniciada correctamente",
+    "signInError": "Error al iniciar sesión",
+    "signUpSuccess": "Cuenta creada correctamente",
+    "signUpError": "Error al crear cuenta"
+  }
+}

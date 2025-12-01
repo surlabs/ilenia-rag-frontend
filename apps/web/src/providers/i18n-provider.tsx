@@ -1,0 +1,103 @@
+"use client";
+
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react";
+import esTranslations from "@/locales/es.json";
+import euTranslations from "@/locales/eu.json";
+import glTranslations from "@/locales/gl.json";
+import vaTranslations from "@/locales/va.json";
+
+export type Locale = "es" | "eu" | "gl" | "va";
+
+export const LANGUAGES = [
+	{ code: "es" as const, label: "Castellano" },
+	{ code: "eu" as const, label: "Euskera" },
+	{ code: "gl" as const, label: "Galego" },
+	{ code: "va" as const, label: "Valencià" },
+] as const;
+
+type Translations = typeof esTranslations;
+
+const translations: Record<Locale, Translations> = {
+	es: esTranslations,
+	eu: euTranslations,
+	gl: glTranslations,
+	va: vaTranslations,
+};
+
+type NestedKeyOf<T> = T extends object
+	? { [K in keyof T]: K extends string ? (T[K] extends object ? `${K}.${NestedKeyOf<T[K]>}` : K) : never }[keyof T]
+	: never;
+
+type TranslationKey = NestedKeyOf<Translations>;
+
+interface I18nContextType {
+	locale: Locale;
+	setLocale: (locale: Locale) => void;
+	t: (key: TranslationKey) => string;
+}
+
+const I18nContext = createContext<I18nContextType | undefined>(undefined);
+
+const LOCALE_STORAGE_KEY = "ilenia-locale";
+
+function getNestedValue(obj: Record<string, unknown>, path: string): string {
+	const keys = path.split(".");
+	let result: unknown = obj;
+	for (const key of keys) {
+		if (result && typeof result === "object" && key in result) {
+			result = (result as Record<string, unknown>)[key];
+		} else {
+			return path;
+		}
+	}
+	return typeof result === "string" ? result : path;
+}
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+	const [locale, setLocaleState] = useState<Locale>("es");
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
+		if (stored && translations[stored]) {
+			setLocaleState(stored);
+		}
+		setMounted(true);
+	}, []);
+
+	const setLocale = useCallback((newLocale: Locale) => {
+		setLocaleState(newLocale);
+		localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+		document.documentElement.lang = newLocale;
+	}, []);
+
+	const t = useCallback(
+		(key: TranslationKey): string => {
+			return getNestedValue(translations[locale] as unknown as Record<string, unknown>, key);
+		},
+		[locale]
+	);
+
+	const value = useMemo(
+		() => ({ locale, setLocale, t }),
+		[locale, setLocale, t]
+	);
+
+	if (!mounted) {
+		return (
+			<I18nContext.Provider value={{ locale: "es", setLocale: () => {}, t: (key) => getNestedValue(esTranslations as unknown as Record<string, unknown>, key) }}>
+				{children}
+			</I18nContext.Provider>
+		);
+	}
+
+	return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+export function useTranslation() {
+	const context = useContext(I18nContext);
+	if (!context) {
+		throw new Error("useTranslation must be used within an I18nProvider");
+	}
+	return context;
+}

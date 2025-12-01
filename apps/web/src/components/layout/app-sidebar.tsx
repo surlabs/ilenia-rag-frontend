@@ -27,10 +27,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import { AuthModal } from "@/components/auth-modal";
+import { useTranslation } from "@/providers/i18n-provider";
 
 export function AppSidebar() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const { t } = useTranslation();
 
   const handleSignOut = () => {
     authClient.signOut({
@@ -57,7 +59,7 @@ export function AppSidebar() {
             </span>
           </Link>
           {isLoggedIn && (
-            <Button variant="ghost" size="icon" className="h-8 w-8" title="Nuevo Chat" asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8" title={t("common.newChat")} asChild>
               <Link href="/chat">
                 <SquarePen className="h-4 w-4" />
               </Link>
@@ -71,7 +73,7 @@ export function AppSidebar() {
           <>
             <SidebarGroup>
               <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                Hoy
+                {t("sidebar.today")}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -91,7 +93,7 @@ export function AppSidebar() {
 
             <SidebarGroup>
               <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                Ayer
+                {t("sidebar.yesterday")}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -107,7 +109,7 @@ export function AppSidebar() {
         ) : (
           <div className="flex-1 flex items-center justify-center p-4">
             <p className="text-xs text-muted-foreground text-center">
-              Inicia sesión para ver tu historial
+              {t("sidebar.loginToSeeHistory")}
             </p>
           </div>
         )}
@@ -143,12 +145,12 @@ export function AppSidebar() {
             <DropdownMenuContent side="top" align="start" className="w-56">
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
-                Configuración
+                {t("common.settings")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut} className="text-red-600 focus:text-red-600">
                 <LogOut className="mr-2 h-4 w-4" />
-                Cerrar Sesión
+                {t("common.signOut")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -158,7 +160,7 @@ export function AppSidebar() {
               defaultOpen={true}
               trigger={
                 <Button variant="outline" className="w-full">
-                  Iniciar Sesión
+                  {t("common.signIn")}
                 </Button>
               }
             />

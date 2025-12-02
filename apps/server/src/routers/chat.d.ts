@@ -111,11 +111,13 @@ export declare const chatRouter: {
             };
         };
     }>, import("@orpc/contract").Schema<unknown, unknown>, import("@orpc/contract").Schema<{
+        lastMessage: string;
         id: string;
         title: string;
         createdAt: Date;
         updatedAt: Date;
     }[], {
+        lastMessage: string;
         id: string;
         title: string;
         createdAt: Date;

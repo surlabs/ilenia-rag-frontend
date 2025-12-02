@@ -11,7 +11,11 @@
   },
   "chat": {
     "deleteTitle": "Eliminar conversa?",
-    "deleteDescription": "Esta acción non se pode desfacer. Eliminarase permanentemente esta conversa."
+    "deleteDescription": "Esta acción non se pode desfacer. Eliminarase permanentemente esta conversa.",
+    "notFound": "Conversa non atopada",
+    "emptyTitle": "Sen mensaxes",
+    "emptyDescription": "Esta conversa aínda non ten mensaxes",
+    "noMessages": "Sen mensaxes aínda"
   },
   "sidebar": {
     "today": "Hoxe",

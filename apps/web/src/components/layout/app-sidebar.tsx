@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, SquarePen, ChevronsUpDown, Settings, LogOut, Trash2, MoreHorizontal } from "lucide-react";
+import { MessageCircle, SquarePen, ChevronsUpDown, Settings, LogOut, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -14,8 +14,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import {
@@ -48,6 +46,7 @@ type Chat = {
   title: string;
   createdAt: Date;
   updatedAt: Date;
+  lastMessage?: string | null;
 };
 
 type GroupedChats = {
@@ -150,6 +149,11 @@ export function AppSidebar() {
 
   const isLoggedIn = !isPending && !!session;
 
+  const formatTime = (date: Date) => {
+    const d = new Date(date);
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
   const renderChatGroup = (label: string, chatList: Chat[]) => {
     if (chatList.length === 0) return null;
     return (
@@ -159,31 +163,44 @@ export function AppSidebar() {
         </SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {chatList.map((chat) => (
-              <SidebarMenuItem key={chat.id}>
-                <SidebarMenuButton isActive={chat.id === currentChatId} asChild>
-                  <Link href={`/chat/${chat.id}`}>
-                    <span className="truncate text-xs">{chat.title}</span>
-                  </Link>
-                </SidebarMenuButton>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuAction>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </SidebarMenuAction>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="right" align="start">
-                    <DropdownMenuItem
-                      onClick={() => setChatToDelete(chat.id)}
-                      className="text-red-600 focus:text-red-600"
+            {chatList.map((chat) => {
+              const isActive = chat.id === currentChatId;
+              return (
+                <SidebarMenuItem key={chat.id} className="group">
+                  <Link
+                    href={`/chat/${chat.id}`}
+                    className={`
+                      w-full text-left relative flex flex-col gap-1 px-2.5 py-2.5 rounded-md transition-all border
+                      ${isActive
+                        ? "bg-white dark:bg-slate-800 border-sidebar-border dark:border-slate-700 shadow-sm text-sidebar-foreground dark:text-white"
+                        : "border-transparent text-slate-600 dark:text-slate-400 hover:bg-sidebar-accent dark:hover:bg-slate-800/50"
+                      }
+                    `}
+                  >
+                    <div className="flex items-center justify-between w-full min-w-0">
+                      <span className="truncate text-xs font-medium">{chat.title}</span>
+                      <span className="text-[10px] text-slate-400 font-normal tabular-nums flex-shrink-0 ml-2">
+                        {formatTime(chat.createdAt)}
+                      </span>
+                    </div>
+                    <span className="truncate text-[10px] text-slate-500 dark:text-slate-400 pr-6 block w-full">
+                      {chat.lastMessage || t("chat.noMessages")}
+                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setChatToDelete(chat.id);
+                      }}
+                      className="absolute right-2 bottom-2 p-1 opacity-0 group-hover:opacity-100 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 rounded transition-opacity"
+                      title={t("common.delete")}
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      {t("common.delete")}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </SidebarMenuItem>
-            ))}
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </Link>
+                </SidebarMenuItem>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

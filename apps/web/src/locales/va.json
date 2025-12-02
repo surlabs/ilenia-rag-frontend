@@ -11,7 +11,11 @@
   },
   "chat": {
     "deleteTitle": "Eliminar conversa?",
-    "deleteDescription": "Esta acció no es pot desfer. S'eliminarà permanentment esta conversa."
+    "deleteDescription": "Esta acció no es pot desfer. S'eliminarà permanentment esta conversa.",
+    "notFound": "Conversa no trobada",
+    "emptyTitle": "Sense missatges",
+    "emptyDescription": "Esta conversa encara no té missatges",
+    "noMessages": "Sense missatges encara"
   },
   "sidebar": {
     "today": "Hui",

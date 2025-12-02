@@ -11,7 +11,11 @@
   },
   "chat": {
     "deleteTitle": "Elkarrizketa ezabatu?",
-    "deleteDescription": "Ekintza hau ezin da desegin. Elkarrizketa hau behin betiko ezabatuko da."
+    "deleteDescription": "Ekintza hau ezin da desegin. Elkarrizketa hau behin betiko ezabatuko da.",
+    "notFound": "Elkarrizketa ez da aurkitu",
+    "emptyTitle": "Mezurik gabe",
+    "emptyDescription": "Elkarrizketa honek oraindik ez du mezurik",
+    "noMessages": "Oraindik mezurik ez"
   },
   "sidebar": {
     "today": "Gaur",

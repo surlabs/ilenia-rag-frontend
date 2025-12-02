@@ -3,10 +3,27 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { orpc } from "@/utils/orpc";
-import { cn } from "@/lib/utils";
-import { Loader2, ExternalLink } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import {
+	Conversation,
+	ConversationContent,
+	ConversationEmptyState,
+	ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import {
+	Message,
+	MessageContent,
+	MessageResponse,
+} from "@/components/ai-elements/message";
+import {
+	Sources,
+	SourcesTrigger,
+	SourcesContent,
+	Source,
+} from "@/components/ai-elements/sources";
+import { useTranslation } from "@/providers/i18n-provider";
 
-type Message = {
+type ChatMessage = {
 	id: string;
 	chatId: string;
 	role: "user" | "assistant" | "system";
@@ -18,6 +35,7 @@ type Message = {
 export default function ChatDetailPage() {
 	const params = useParams();
 	const chatId = params.id as string;
+	const { t } = useTranslation();
 
 	const { data: chat, isLoading, error } = useQuery({
 		...orpc.chat.get.queryOptions({ input: { id: chatId } }),
@@ -35,51 +53,42 @@ export default function ChatDetailPage() {
 	if (error || !chat) {
 		return (
 			<div className="flex h-full items-center justify-center">
-				<p className="text-muted-foreground">Conversación no encontrada</p>
+				<p className="text-muted-foreground">{t("chat.notFound")}</p>
 			</div>
 		);
 	}
 
+	if (chat.messages.length === 0) {
+		return (
+			<ConversationEmptyState
+				title={t("chat.emptyTitle")}
+				description={t("chat.emptyDescription")}
+			/>
+		);
+	}
+
 	return (
-		<div className="flex h-full flex-col">
-			<div className="flex-1 overflow-auto p-4 space-y-4">
-				{chat.messages.map((message: Message) => (
-					<div
-						key={message.id}
-						className={cn(
-							"flex flex-col gap-2 max-w-2xl",
-							message.role === "user" ? "ml-auto items-end" : "mr-auto items-start"
-						)}
-					>
-						<div
-							className={cn(
-								"rounded-lg px-4 py-2 text-sm",
-								message.role === "user"
-									? "bg-sky-600 text-white"
-									: "bg-muted"
-							)}
-						>
-							{message.content}
-						</div>
+		<Conversation>
+			<ConversationContent className="max-w-3xl mx-auto">
+				{chat.messages.map((message: ChatMessage) => (
+					<Message key={message.id} from={message.role}>
+						<MessageContent>
+							<MessageResponse>{message.content}</MessageResponse>
+						</MessageContent>
 						{message.sources && message.sources.length > 0 && (
-							<div className="flex flex-wrap gap-2">
-								{message.sources.map((source, idx) => (
-									<a
-										key={idx}
-										href={source.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="inline-flex items-center gap-1 text-xs text-sky-600 hover:underline"
-									>
-										<ExternalLink className="h-3 w-3" />
-										{source.title}
-									</a>
-								))}
-							</div>
+							<Sources>
+								<SourcesTrigger count={message.sources.length} />
+								<SourcesContent>
+									{message.sources.map((source, idx) => (
+										<Source key={idx} href={source.url} title={source.title} />
+									))}
+								</SourcesContent>
+							</Sources>
 						)}
-					</div>
+					</Message>
 				))}
-			</div>
-		</div>
+			</ConversationContent>
+			<ConversationScrollButton />
+		</Conversation>
 	);
 }

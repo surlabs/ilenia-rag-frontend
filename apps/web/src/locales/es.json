@@ -11,7 +11,11 @@
   },
   "chat": {
     "deleteTitle": "¿Eliminar conversación?",
-    "deleteDescription": "Esta acción no se puede deshacer. Se eliminará permanentemente esta conversación."
+    "deleteDescription": "Esta acción no se puede deshacer. Se eliminará permanentemente esta conversación.",
+    "notFound": "Conversación no encontrada",
+    "emptyTitle": "Sin mensajes",
+    "emptyDescription": "Esta conversación aún no tiene mensajes",
+    "noMessages": "Sin mensajes aún"
   },
   "sidebar": {
     "today": "Hoy",

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure } from "../lib/orpc";
 import { db } from "../db";
 import { chat, message } from "../db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 
 export const chatRouter = {
 	list: protectedProcedure.handler(async ({ context }) => {
@@ -17,7 +17,23 @@ export const chatRouter = {
 			.from(chat)
 			.where(eq(chat.userId, userId))
 			.orderBy(desc(chat.createdAt));
-		return chats;
+
+		const chatsWithLastMessage = await Promise.all(
+			chats.map(async (c) => {
+				const [lastMsg] = await db
+					.select({ content: message.content })
+					.from(message)
+					.where(eq(message.chatId, c.id))
+					.orderBy(desc(message.createdAt))
+					.limit(1);
+				return {
+					...c,
+					lastMessage: lastMsg?.content ?? null,
+				};
+			})
+		);
+
+		return chatsWithLastMessage;
 	}),
 
 	get: protectedProcedure

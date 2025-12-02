@@ -28,8 +28,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import { AuthModal } from "@/components/auth-modal";
 import { useTranslation } from "@/providers/i18n-provider";
-import { orpc, client, queryClient } from "@/utils/orpc";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { client } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,18 +42,18 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-type Chat = {
+type ChatListItem = {
   id: string;
   title: string;
   createdAt: Date;
   updatedAt: Date;
-  lastMessage?: string | null;
+  lastMessage: string | null;
 };
 
 type GroupedChats = {
-  today: Chat[];
-  yesterday: Chat[];
-  older: Chat[];
+  today: ChatListItem[];
+  yesterday: ChatListItem[];
+  older: ChatListItem[];
 };
 
 function isToday(date: Date): boolean {
@@ -74,7 +75,7 @@ function isYesterday(date: Date): boolean {
   );
 }
 
-function groupChatsByDate(chats: Chat[]): GroupedChats {
+function groupChatsByDate(chats: ChatListItem[]): GroupedChats {
   const groups: GroupedChats = { today: [], yesterday: [], older: [] };
   
   for (const chat of chats) {
@@ -96,6 +97,7 @@ export function AppSidebar() {
   const params = useParams();
   const { data: session, isPending } = authClient.useSession();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   
   const currentChatId = params?.id as string | undefined;
 
@@ -104,26 +106,100 @@ export function AppSidebar() {
     enabled: !!session,
   });
 
-  const groupedChats = useMemo(() => groupChatsByDate(chats), [chats]);
+  // Casting chats to our local type to avoid inference issues if needed,
+  // though strictly they should match if the router is typed correctly.
+  const groupedChats = useMemo(() => groupChatsByDate(chats as unknown as ChatListItem[]), [chats]);
 
   const [chatToDelete, setChatToDelete] = useState<string | null>(null);
 
+type CreateChatResponse = {
+  id: string;
+  userId: string;
+  title: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+// ...
+
   const createChatMutation = useMutation({
     mutationFn: () => client.chat.create({}),
-    onSuccess: (newChat) => {
-      queryClient.invalidateQueries({ queryKey: ["chat", "list"] });
+    onSuccess: (data) => {
+      const newChat = data as CreateChatResponse;
+      const listKey = orpc.chat.list.queryOptions().queryKey;
+      const getKey = orpc.chat.get.queryOptions({ input: { id: newChat.id } }).queryKey;
+
+      // Construct object matching ChatListItem interface exactly
+      const newChatListItem: ChatListItem = {
+        id: newChat.id,
+        title: newChat.title,
+        createdAt: new Date(newChat.createdAt),
+        updatedAt: new Date(newChat.updatedAt),
+        lastMessage: null,
+      };
+
+      queryClient.setQueryData(listKey, (old: any) => {
+        return [newChatListItem, ...(old || [])];
+      });
+
+      queryClient.setQueryData(getKey, {
+        ...newChat,
+        messages: [],
+      });
+
       router.push(`/chat/${newChat.id}`);
     },
   });
 
   const deleteChatMutation = useMutation({
     mutationFn: (id: string) => client.chat.delete({ id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["chat", "list"] });
-      if (currentChatId === chatToDelete) {
-        router.push("/chat");
+    onMutate: async (id) => {
+      const listKey = orpc.chat.list.queryOptions().queryKey;
+      await queryClient.cancelQueries({ queryKey: listKey });
+      const previousChats = queryClient.getQueryData<ChatListItem[]>(listKey);
+
+      // Logic to determine next chat navigation if deleting current
+      let nextChatId: string | null = null;
+      if (currentChatId === id && previousChats) {
+        const index = previousChats.findIndex((c) => c.id === id);
+        if (index !== -1) {
+          // Prefer next item (older in list)
+          if (index + 1 < previousChats.length) {
+            nextChatId = previousChats[index + 1].id;
+          } 
+          // Fallback to previous item (newer in list)
+          else if (index - 1 >= 0) {
+            nextChatId = previousChats[index - 1].id;
+          }
+        }
+      }
+
+      queryClient.setQueryData(listKey, (old: any) => {
+        return (old || []).filter((c: ChatListItem) => c.id !== id);
+      });
+
+      if (currentChatId === id) {
+        if (nextChatId) {
+          router.push(`/chat/${nextChatId}`);
+        } else {
+          router.push("/chat");
+        }
       }
       setChatToDelete(null);
+
+      return { previousChats };
+    },
+    onError: (err, id, context) => {
+      if (context?.previousChats) {
+        const listKey = orpc.chat.list.queryOptions().queryKey;
+        // TODO: Remove 'as any' once ORPC/Drizzle type inference for nullable fields is fixed.
+        // Currently, inferred type expects 'lastMessage' to be string, but it can be null.
+        queryClient.setQueryData(listKey, context.previousChats as any);
+      }
+    },
+    onSettled: () => {
+      const listKey = orpc.chat.list.queryOptions().queryKey;
+      queryClient.invalidateQueries({ queryKey: listKey });
     },
   });
 
@@ -154,7 +230,7 @@ export function AppSidebar() {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const renderChatGroup = (label: string, chatList: Chat[]) => {
+  const renderChatGroup = (label: string, chatList: ChatListItem[]) => {
     if (chatList.length === 0) return null;
     return (
       <SidebarGroup key={label}>

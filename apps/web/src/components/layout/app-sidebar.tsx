@@ -1,8 +1,9 @@
 "use client";
 
-import { MessageCircle, SquarePen, ChevronsUpDown, Settings, LogOut } from "lucide-react";
+import { MessageCircle, SquarePen, ChevronsUpDown, Settings, LogOut, Trash2, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
 import {
   Sidebar,
@@ -13,6 +14,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
@@ -28,11 +30,113 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import { AuthModal } from "@/components/auth-modal";
 import { useTranslation } from "@/providers/i18n-provider";
+import { orpc, client, queryClient } from "@/utils/orpc";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+type Chat = {
+  id: string;
+  title: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type GroupedChats = {
+  today: Chat[];
+  yesterday: Chat[];
+  older: Chat[];
+};
+
+function isToday(date: Date): boolean {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
+
+function isYesterday(date: Date): boolean {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  return (
+    date.getDate() === yesterday.getDate() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getFullYear() === yesterday.getFullYear()
+  );
+}
+
+function groupChatsByDate(chats: Chat[]): GroupedChats {
+  const groups: GroupedChats = { today: [], yesterday: [], older: [] };
+  
+  for (const chat of chats) {
+    const date = new Date(chat.createdAt);
+    if (isToday(date)) {
+      groups.today.push(chat);
+    } else if (isYesterday(date)) {
+      groups.yesterday.push(chat);
+    } else {
+      groups.older.push(chat);
+    }
+  }
+  
+  return groups;
+}
 
 export function AppSidebar() {
   const router = useRouter();
+  const params = useParams();
   const { data: session, isPending } = authClient.useSession();
   const { t } = useTranslation();
+  
+  const currentChatId = params?.id as string | undefined;
+
+  const { data: chats = [] } = useQuery({
+    ...orpc.chat.list.queryOptions(),
+    enabled: !!session,
+  });
+
+  const groupedChats = useMemo(() => groupChatsByDate(chats), [chats]);
+
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
+
+  const createChatMutation = useMutation({
+    mutationFn: () => client.chat.create({}),
+    onSuccess: (newChat) => {
+      queryClient.invalidateQueries({ queryKey: ["chat", "list"] });
+      router.push(`/chat/${newChat.id}`);
+    },
+  });
+
+  const deleteChatMutation = useMutation({
+    mutationFn: (id: string) => client.chat.delete({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chat", "list"] });
+      if (currentChatId === chatToDelete) {
+        router.push("/chat");
+      }
+      setChatToDelete(null);
+    },
+  });
+
+  const handleNewChat = () => {
+    createChatMutation.mutate();
+  };
+
+  const handleDeleteChat = () => {
+    if (chatToDelete) {
+      deleteChatMutation.mutate(chatToDelete);
+    }
+  };
 
   const handleSignOut = () => {
     authClient.signOut({
@@ -46,7 +150,48 @@ export function AppSidebar() {
 
   const isLoggedIn = !isPending && !!session;
 
+  const renderChatGroup = (label: string, chatList: Chat[]) => {
+    if (chatList.length === 0) return null;
+    return (
+      <SidebarGroup key={label}>
+        <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          {label}
+        </SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {chatList.map((chat) => (
+              <SidebarMenuItem key={chat.id}>
+                <SidebarMenuButton isActive={chat.id === currentChatId} asChild>
+                  <Link href={`/chat/${chat.id}`}>
+                    <span className="truncate text-xs">{chat.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuAction>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </SidebarMenuAction>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" align="start">
+                    <DropdownMenuItem
+                      onClick={() => setChatToDelete(chat.id)}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {t("common.delete")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    );
+  };
+
   return (
+    <>
     <Sidebar>
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center justify-between px-2 py-1">
@@ -59,10 +204,15 @@ export function AppSidebar() {
             </span>
           </Link>
           {isLoggedIn && (
-            <Button variant="ghost" size="icon" className="h-8 w-8" title={t("common.newChat")} asChild>
-              <Link href="/chat">
-                <SquarePen className="h-4 w-4" />
-              </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              title={t("common.newChat")}
+              onClick={handleNewChat}
+              disabled={createChatMutation.isPending}
+            >
+              <SquarePen className="h-4 w-4" />
             </Button>
           )}
         </div>
@@ -71,40 +221,16 @@ export function AppSidebar() {
       <SidebarContent>
         {isLoggedIn ? (
           <>
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                {t("sidebar.today")}
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive>
-                      <span className="truncate text-xs font-medium">Estado del Euskera en IA</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <span className="truncate text-xs">Resumen Proyecto ILENIA</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            <SidebarGroup>
-              <SidebarGroupLabel className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
-                {t("sidebar.yesterday")}
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton>
-                      <span className="truncate text-xs">Traducción Jurídica GL</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
+            {renderChatGroup(t("sidebar.today"), groupedChats.today)}
+            {renderChatGroup(t("sidebar.yesterday"), groupedChats.yesterday)}
+            {renderChatGroup(t("sidebar.older"), groupedChats.older)}
+            {chats.length === 0 && (
+              <div className="flex-1 flex items-center justify-center p-4">
+                <p className="text-xs text-muted-foreground text-center">
+                  {t("sidebar.noChats")}
+                </p>
+              </div>
+            )}
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center p-4">
@@ -168,5 +294,26 @@ export function AppSidebar() {
         )}
       </SidebarFooter>
     </Sidebar>
+
+      <AlertDialog open={!!chatToDelete} onOpenChange={(open) => !open && setChatToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("chat.deleteTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("chat.deleteDescription")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteChat}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {t("common.delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

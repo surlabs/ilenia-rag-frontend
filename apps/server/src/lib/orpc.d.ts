@@ -2,21 +2,21 @@ export declare const o: import("@orpc/server").Builder<{
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -24,21 +24,21 @@ export declare const o: import("@orpc/server").Builder<{
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -47,21 +47,21 @@ export declare const publicProcedure: import("@orpc/server").Builder<{
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -69,21 +69,21 @@ export declare const publicProcedure: import("@orpc/server").Builder<{
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -92,21 +92,21 @@ export declare const protectedProcedure: import("@orpc/server").BuilderWithMiddl
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -114,21 +114,21 @@ export declare const protectedProcedure: import("@orpc/server").BuilderWithMiddl
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -136,21 +136,21 @@ export declare const protectedProcedure: import("@orpc/server").BuilderWithMiddl
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -158,21 +158,21 @@ export declare const protectedProcedure: import("@orpc/server").BuilderWithMiddl
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     } | null;
@@ -180,21 +180,21 @@ export declare const protectedProcedure: import("@orpc/server").BuilderWithMiddl
     session: {
         session: {
             id: string;
-            userId: string;
-            expiresAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            userId: string;
+            expiresAt: Date;
             token: string;
             ipAddress?: string | null | undefined | undefined;
             userAgent?: string | null | undefined | undefined;
         };
         user: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             email: string;
             emailVerified: boolean;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             image?: string | null | undefined | undefined;
         };
     };

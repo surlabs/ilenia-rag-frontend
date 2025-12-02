@@ -5,12 +5,20 @@
     "appName": "ILENIA Txat",
     "settings": "Ezarpenak",
     "signOut": "Saioa itxi",
-    "signIn": "Saioa hasi"
+    "signIn": "Saioa hasi",
+    "delete": "Ezabatu",
+    "cancel": "Ezeztatu"
+  },
+  "chat": {
+    "deleteTitle": "Elkarrizketa ezabatu?",
+    "deleteDescription": "Ekintza hau ezin da desegin. Elkarrizketa hau behin betiko ezabatuko da."
   },
   "sidebar": {
     "today": "Gaur",
     "yesterday": "Atzo",
-    "loginToSeeHistory": "Hasi saioa zure historia ikusteko"
+    "older": "Lehenagokoak",
+    "loginToSeeHistory": "Hasi saioa zure historia ikusteko",
+    "noChats": "Oraindik ez dago elkarrizketarik"
   },
   "theme": {
     "toggle": "Gaia aldatu",

@@ -5,12 +5,20 @@
     "appName": "ILENIA Xat",
     "settings": "Configuració",
     "signOut": "Tancar sessió",
-    "signIn": "Iniciar sessió"
+    "signIn": "Iniciar sessió",
+    "delete": "Eliminar",
+    "cancel": "Cancel·lar"
+  },
+  "chat": {
+    "deleteTitle": "Eliminar conversa?",
+    "deleteDescription": "Esta acció no es pot desfer. S'eliminarà permanentment esta conversa."
   },
   "sidebar": {
     "today": "Hui",
     "yesterday": "Ahir",
-    "loginToSeeHistory": "Inicia sessió per a veure el teu historial"
+    "older": "Anteriors",
+    "loginToSeeHistory": "Inicia sessió per a veure el teu historial",
+    "noChats": "Encara no hi ha converses"
   },
   "theme": {
     "toggle": "Canviar tema",

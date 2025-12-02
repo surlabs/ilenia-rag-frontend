@@ -5,12 +5,20 @@
     "appName": "ILENIA Chat",
     "settings": "Configuración",
     "signOut": "Pechar sesión",
-    "signIn": "Iniciar sesión"
+    "signIn": "Iniciar sesión",
+    "delete": "Eliminar",
+    "cancel": "Cancelar"
+  },
+  "chat": {
+    "deleteTitle": "Eliminar conversa?",
+    "deleteDescription": "Esta acción non se pode desfacer. Eliminarase permanentemente esta conversa."
   },
   "sidebar": {
     "today": "Hoxe",
     "yesterday": "Onte",
-    "loginToSeeHistory": "Inicia sesión para ver o teu historial"
+    "older": "Anteriores",
+    "loginToSeeHistory": "Inicia sesión para ver o teu historial",
+    "noChats": "Aínda non hai conversas"
   },
   "theme": {
     "toggle": "Cambiar tema",

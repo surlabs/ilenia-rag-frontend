@@ -37,13 +37,17 @@ export default function ChatDetailPage() {
 	const chatId = params.id as string;
 	const { t } = useTranslation();
 
-	const { data: chat, isLoading, error } = useQuery({
+	const { data: chat, isLoading, isFetching, error } = useQuery({
 		...orpc.chat.get.queryOptions({ input: { id: chatId } }),
 		enabled: !!chatId,
 	});
 
-	if (isLoading) {
-		return <Loader size={24} />;
+	if (isLoading || isFetching || (!chat && !error)) {
+		return (
+			<div className="flex h-full items-center justify-center">
+				<Loader size={24} />
+			</div>
+		);
 	}
 
 	if (error || !chat) {

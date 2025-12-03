@@ -30,10 +30,12 @@ type NestedKeyOf<T> = T extends object
 
 type TranslationKey = NestedKeyOf<Translations>;
 
+type InterpolationParams = Record<string, string | undefined>;
+
 interface I18nContextType {
 	locale: Locale;
 	setLocale: (locale: Locale) => void;
-	t: (key: TranslationKey) => string;
+	t: (key: TranslationKey, params?: InterpolationParams) => string;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -51,6 +53,11 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
 		}
 	}
 	return typeof result === "string" ? result : path;
+}
+
+function interpolate(template: string, params?: InterpolationParams): string {
+	if (!params) return template;
+	return template.replace(/\{\{(\w+)\}\}/g, (_, key) => params[key] ?? `{{${key}}}`);
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -72,8 +79,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 	}, []);
 
 	const t = useCallback(
-		(key: TranslationKey): string => {
-			return getNestedValue(translations[locale] as unknown as Record<string, unknown>, key);
+		(key: TranslationKey, params?: InterpolationParams): string => {
+			const template = getNestedValue(translations[locale] as unknown as Record<string, unknown>, key);
+			return interpolate(template, params);
 		},
 		[locale]
 	);
@@ -85,7 +93,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
 	if (!mounted) {
 		return (
-			<I18nContext.Provider value={{ locale: "es", setLocale: () => {}, t: (key) => getNestedValue(esTranslations as unknown as Record<string, unknown>, key) }}>
+			<I18nContext.Provider value={{ locale: "es", setLocale: () => {}, t: (key, params) => interpolate(getNestedValue(esTranslations as unknown as Record<string, unknown>, key), params) }}>
 				{children}
 			</I18nContext.Provider>
 		);

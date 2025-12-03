@@ -27,7 +27,7 @@ export function MessageStatus({ code, params }: MessageStatusProps) {
     >
       {isError && <AlertCircle className="h-4 w-4" />}
       <span>
-        {t(isError ? "status.error" : "status.retrying", params)}
+        {t(isError ? "status.error" : "status.retrying", params?.attempt !== undefined ? { attempt: String(params.attempt) } : undefined)}
       </span>
     </div>
   );

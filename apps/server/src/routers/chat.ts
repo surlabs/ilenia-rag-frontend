@@ -6,10 +6,8 @@ import { eq, desc, and } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import { getRagProvider, type Context } from "../lib/rag-adapter";
 import { ragDiscoveryService } from "../lib/rag-discovery";
-import { retryWithStatus } from "../lib/retry-with-status";
+import { retryWithStatusGenerator } from "../lib/retry-with-status";
 import {
-	STATUS_RETRYING,
-	STATUS_SUCCESS,
 	STATUS_ERROR,
 	type StreamEvent,
 } from "../lib/stream-events";
@@ -222,115 +220,104 @@ export const chatRouter = {
 				}
 			}
 
-			// Stream response from RAG with retry logic
-			let fullResponse = "";
-			let sources: Context[] = [];
-			let streamStarted = false;
-			const retryEvents: StreamEvent[] = [];
+		// Stream response from RAG with retry logic
+		let fullResponse = "";
+		let sources: Context[] = [];
 
-			try {
-				const startStream = async () => {
-					// This will throw if the provider throws
-					const iterator = provider.predict({
-						history: history.map((h) => ({
-							role: h.role,
-							content: h.content,
-						})),
-						prompt: content,
-						language: ragLanguage,
-						domain: ragDomain,
-					});
+		const startStream = async () => {
+			const iterator = provider.predict({
+				history: history.map((h) => ({
+					role: h.role,
+					content: h.content,
+				})),
+				prompt: content,
+				language: ragLanguage,
+				domain: ragDomain,
+			});
 
-					// Get first chunk to verify connection works
-					const first = await iterator.next();
-					if (first.done) {
-						throw new Error("Empty stream from RAG provider");
-					}
+			const first = await iterator.next();
+			if (first.done) {
+				throw new Error("Empty stream from RAG provider");
+			}
 
-					return { iterator, firstChunk: first.value };
-				};
+			return { iterator, firstChunk: first.value };
+		};
 
-				const result = await retryWithStatus(
-					startStream,
-					(attempt) => {
-						retryEvents.push({
-							type: "status",
-							code: STATUS_RETRYING,
-							params: { attempt },
-						});
-					},
-					(error) => {
-						logger.error(
-							{ chatId, error: error.message },
-							"sendMessage: Critical error"
-						);
-					}
-				);
+		const retryGenerator = retryWithStatusGenerator(startStream);
 
-				// Emit any retry events that occurred
-				for (const event of retryEvents) {
-					yield event;
-				}
+		let retryResult: IteratorResult<
+			{ type: "status"; code: string; params?: { attempt?: number; message?: string } },
+			{ success: boolean; value?: { iterator: AsyncGenerator<{ response: string; contexts: Context[] | null }>; firstChunk: { response: string; contexts: Context[] | null } }; error?: Error }
+		>;
 
-				// Connection successful
-				yield { type: "status", code: STATUS_SUCCESS };
-				logger.info({ chatId }, "sendMessage: RAG connection established");
+		do {
+			retryResult = await retryGenerator.next();
+			if (!retryResult.done) {
+				yield retryResult.value as StreamEvent;
+			}
+		} while (!retryResult.done);
 
-				streamStarted = true;
+		const result = retryResult.value;
 
-				// Process first chunk
-				fullResponse += result.firstChunk.response;
-				if (result.firstChunk.contexts) {
-					sources = result.firstChunk.contexts;
+		if (!result.success || !result.value) {
+			logger.error(
+				{ chatId, error: result.error?.message },
+				"sendMessage: Critical error"
+			);
+			return;
+		}
+
+		logger.info({ chatId }, "sendMessage: RAG connection established");
+
+		// Process first chunk
+		fullResponse += result.value.firstChunk.response;
+		if (result.value.firstChunk.contexts) {
+			sources = result.value.firstChunk.contexts;
+		}
+		yield {
+			type: "content",
+			response: result.value.firstChunk.response,
+			contexts: result.value.firstChunk.contexts,
+		};
+
+		// Continue streaming remaining chunks
+		try {
+			for await (const chunk of result.value.iterator) {
+				fullResponse += chunk.response;
+				if (chunk.contexts) {
+					sources = chunk.contexts;
 				}
 				yield {
 					type: "content",
-					response: result.firstChunk.response,
-					contexts: result.firstChunk.contexts,
+					response: chunk.response,
+					contexts: chunk.contexts,
 				};
-
-				// Continue streaming remaining chunks
-				for await (const chunk of result.iterator) {
-					fullResponse += chunk.response;
-					if (chunk.contexts) {
-						sources = chunk.contexts;
-					}
-					yield {
-						type: "content",
-						response: chunk.response,
-						contexts: chunk.contexts,
-					};
-				}
-			} catch (err) {
-				// Emit any pending retry events
-				for (const event of retryEvents) {
-					yield event;
-				}
-
-				yield {
-					type: "status",
-					code: STATUS_ERROR,
-					params: { message: (err as Error).message },
-				};
-				return;
 			}
+		} catch (err) {
+			yield {
+				type: "status",
+				code: STATUS_ERROR,
+				params: { message: (err as Error).message },
+			};
+			return;
+		}
 
 			// Persist assistant message on successful completion
-			if (streamStarted && fullResponse) {
-				const assistantMessageId = crypto.randomUUID();
-				await db.insert(message).values({
-					id: assistantMessageId,
-					chatId,
-					role: "assistant",
-					content: fullResponse,
-					sources: sources.length > 0 ? sources.map((s) => ({ title: s.title, url: s.url || "" })) : null,
-					createdAt: new Date(),
-				});
+		if (fullResponse) {
+			const assistantMessageId = crypto.randomUUID();
+			await db.insert(message).values({
+				id: assistantMessageId,
+				chatId,
+				role: "assistant",
+				content: fullResponse,
+				sources: sources.length > 0 ? sources.map((s) => ({ title: s.title, url: s.url || "" })) : null,
+				createdAt: new Date(),
+			});
 
-				logger.info(
-					{ chatId, responseLength: fullResponse.length },
-					"sendMessage: Response persisted"
-				);
-			}
-		}),
+			logger.info(
+				{ chatId, responseLength: fullResponse.length },
+				"sendMessage: Response persisted"
+			);
+		}
+	}),
 };

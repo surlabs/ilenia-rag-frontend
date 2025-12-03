@@ -1,4 +1,10 @@
 import { logger } from './logger';
+import {
+  STATUS_RETRYING,
+  STATUS_SUCCESS,
+  STATUS_ERROR,
+  type StreamStatusEvent,
+} from './stream-events';
 
 const DEFAULT_MAX_ATTEMPTS = 3;
 const DEFAULT_BASE_DELAY_MS = 1000;
@@ -25,18 +31,22 @@ function calculateBackoffDelay(attempt: number, baseDelayMs: number): number {
   return baseDelayMs * 2 ** (attempt - 1);
 }
 
-export async function retryWithStatus<T>(
+export type RetryResult<T> =
+  | { success: true; value: T }
+  | { success: false; error: Error };
+
+export async function* retryWithStatusGenerator<T>(
   fn: () => Promise<T>,
-  onRetry: (attempt: number, error: Error) => void,
-  onError: (error: Error) => void,
   config?: RetryConfig
-): Promise<T> {
+): AsyncGenerator<StreamStatusEvent, RetryResult<T>> {
   const { maxAttempts, baseDelayMs } = { ...getRetryConfig(), ...config };
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      return await fn();
+      const result = await fn();
+      yield { type: 'status', code: STATUS_SUCCESS };
+      return { success: true, value: result };
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err));
 
@@ -45,7 +55,11 @@ export async function retryWithStatus<T>(
           { attempt, error: lastError.message },
           'RAG request failed, retrying...'
         );
-        onRetry(attempt, lastError);
+        yield {
+          type: 'status',
+          code: STATUS_RETRYING,
+          params: { attempt },
+        };
 
         const delay = calculateBackoffDelay(attempt, baseDelayMs);
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -57,6 +71,12 @@ export async function retryWithStatus<T>(
     { error: lastError?.message, attempts: maxAttempts },
     'RAG request failed after all retries'
   );
-  onError(lastError!);
-  throw lastError;
+
+  yield {
+    type: 'status',
+    code: STATUS_ERROR,
+    params: { message: lastError?.message },
+  };
+
+  return { success: false, error: lastError! };
 }

@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { orpc } from "@/utils/orpc";
-import { Loader2 } from "lucide-react";
+import { Loader } from "@/components/ai-elements/loader";
 import {
 	Conversation,
 	ConversationContent,
@@ -43,11 +43,7 @@ export default function ChatDetailPage() {
 	});
 
 	if (isLoading) {
-		return (
-			<div className="flex h-full items-center justify-center">
-				<Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-			</div>
-		);
+		return <Loader size={24} />;
 	}
 
 	if (error || !chat) {

@@ -148,6 +148,8 @@ export default function ChatDetailPage() {
         );
       }
 
+      let hasError = false;
+
       try {
         setSubmitStatus("streaming");
         let accumulatedContent = "";
@@ -172,21 +174,8 @@ export default function ChatDetailPage() {
             } else if (event.code === "STATUS_ERROR") {
               setCurrentStatusCode(event.code);
               setStatusParams(null);
-
-              // Remove assistant message on error
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              queryClient.setQueryData(getKey, (old: any) => {
-                if (!old) return old;
-                return {
-                  ...old,
-                  messages: old.messages.filter(
-                    (m: ChatMessage) => m.id !== assistantMessageId
-                  ),
-                };
-              });
-
               setSubmitStatus("error");
-              return;
+              hasError = true;
             }
           } else if (event.type === "content") {
             accumulatedContent += event.response;
@@ -242,9 +231,12 @@ export default function ChatDetailPage() {
         }
         setCurrentStatusCode("STATUS_ERROR");
         setSubmitStatus("error");
+        hasError = true;
       } finally {
         setStreamingContent("");
-        setStreamingMessageId(null);
+        if (!hasError) {
+          setStreamingMessageId(null);
+        }
       }
     },
     [chat, chatId, queryClient]

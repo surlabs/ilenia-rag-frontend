@@ -15,6 +15,10 @@ export class MockRagProvider implements RagProvider {
   private predictCallCount = 0;
 
   private shouldSimulateFailure(): boolean {
+    const alwaysFail = process.env.RAG_MOCK_ALWAYS_FAIL === 'true';
+    console.log('[MOCK DEBUG] RAG_MOCK_ALWAYS_FAIL:', process.env.RAG_MOCK_ALWAYS_FAIL, '→ alwaysFail:', alwaysFail);
+    if (alwaysFail) return true;
+
     const simulateFailures = process.env.RAG_MOCK_SIMULATE_FAILURES === 'true';
     if (!simulateFailures) return false;
 

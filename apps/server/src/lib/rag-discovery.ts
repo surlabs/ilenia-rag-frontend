@@ -41,10 +41,19 @@ class RagDiscoveryService {
         );
       } catch (error) {
         logger.error({ err: error }, 'Failed to load mock capabilities');
+        // Even in mock, if loading fails, we might want to stop if it's critical,
+        // but usually mock fallback is safer. For consistency with real mode requirement:
+        throw new Error('RAG Discovery Initialization Failed: Mock capabilities load error.');
       }
     } else {
       // Initial active discovery
       await this.refreshCapabilities();
+      
+      if (this.capabilityMap.size === 0) {
+        const msg = 'RAG Discovery Initialization Failed: No capabilities found from any host.';
+        logger.fatal(msg);
+        throw new Error(msg);
+      }
     }
   }
 
@@ -101,6 +110,7 @@ class RagDiscoveryService {
       const domain = dom === '*' ? null : dom;
 
       // Simple label generation
+      // TODO: Could be improved with i18n
       const langLabel = language ? language.toUpperCase() : 'Multilingüe';
       const domLabel =
         domain ? domain.charAt(0).toUpperCase() + domain.slice(1) : 'General';
@@ -135,7 +145,7 @@ class RagDiscoveryService {
 
     for (const url of servers) {
       try {
-        const config = await this.fetchConfig(url.trim());
+        const config = await this.fetchConfigWithRetry(url.trim());
         for (const mode of config.modes) {
           const key = this.normalizeKey(mode.language, mode.domain);
           newMap.set(key, url.trim());
@@ -143,7 +153,7 @@ class RagDiscoveryService {
       } catch (error) {
         logger.error(
           { err: error, url },
-          'Failed to fetch config from backend',
+          'Failed to fetch config from backend after retries',
         );
         // Continue to next server
       }
@@ -151,6 +161,24 @@ class RagDiscoveryService {
 
     this.capabilityMap = newMap;
     logger.info({ capabilities: Array.from(this.capabilityMap.keys()) }, 'Map Updated');
+  }
+
+  private async fetchConfigWithRetry(url: string): Promise<{ modes: { language: string; domain: string }[] }> {
+    const retries = parseInt(process.env.RAG_DISCOVERY_RETRIES || '3', 10);
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        return await this.fetchConfig(url);
+      } catch (error) {
+        lastError = error;
+        if (attempt < retries) {
+          logger.warn({ url, attempt: attempt + 1, err: error }, 'Retrying discovery fetch...');
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Simple 1s backoff
+        }
+      }
+    }
+    throw lastError;
   }
 
   private async fetchConfig(

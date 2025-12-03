@@ -1,0 +1,53 @@
+[
+  {
+    "language": "es",
+    "domain": "general",
+    "response": "Esta es una respuesta generada por el modo Mock para el dominio general en español. Simula una consulta a un RAG real.\n\nAquí hay una lista de puntos clave:\n1. El sistema está en modo offline.\n2. No se están consumiendo tokens reales.\n3. La latencia es simulada.",
+    "contexts": [
+      {
+        "id": "doc-es-1",
+        "title": "Introducción a Ilenia",
+        "passage": "Ilenia es un proyecto de inteligencia artificial para la administración pública.",
+        "url": "https://ilenia.ia/intro"
+      },
+      {
+        "id": "doc-es-2",
+        "title": "Guía de Usuario",
+        "passage": "Para usar el chat, seleccione el idioma y escriba su pregunta.",
+        "timestamp": "2025-01-01T10:00:00Z"
+      }
+    ]
+  },
+  {
+    "language": "eu",
+    "domain": null,
+    "response": "Hau Ilenia proiektuaren simulazio bat da. 'eu-*' konfigurazioa (euskara, edozein domeinu) detektatu da.\n\nSistemak erantzun hau sortu du kanpoko zerbitzarietara konektatu gabe.",
+    "contexts": [
+      {
+        "id": "doc-eu-1",
+        "title": "Euskararen Erabilera",
+        "passage": "Administrazioan euskararen erabilera sustatzeko planak.",
+        "metadata": { "type": "law" }
+      }
+    ]
+  },
+  {
+    "language": null,
+    "domain": "legal",
+    "response": "Respuesta simulada para el dominio LEGAL (cualquier idioma). Este escenario se activa cuando el dominio es 'legal' pero no hay un escenario específico para el idioma seleccionado.",
+    "contexts": []
+  },
+  {
+    "language": "gl",
+    "domain": "health",
+    "response": "Esta é unha resposta simulada sobre saúde en galego. O sistema de saúde de Galicia (SERGAS) ofrece servizos a todos os cidadáns.",
+    "contexts": [
+      {
+        "id": "doc-gl-1",
+        "title": "Servizo Galego de Saúde",
+        "passage": "O SERGAS é o organismo responsable da asistencia sanitaria pública en Galicia.",
+        "url": "https://sergas.gal"
+      }
+    ]
+  }
+]

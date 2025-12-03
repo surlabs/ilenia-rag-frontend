@@ -64,12 +64,11 @@ export const chatRouter = {
 		}),
 
 	create: protectedProcedure
-		.input(z.object({ title: z.string().optional() }))
+		.input(z.object({ title: z.string() }))
 		.handler(async ({ input, context }) => {
 			const userId = context.session.user.id;
 			const id = crypto.randomUUID();
-			// TODO: We must use i18n here
-			const title = input.title || "Nueva conversación";
+			const title = input.title;
 			const now = new Date();
 
 			await db.insert(chat).values({

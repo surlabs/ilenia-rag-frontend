@@ -15,7 +15,8 @@
     "notFound": "Conversa no trobada",
     "emptyTitle": "Sense missatges",
     "emptyDescription": "Esta conversa encara no té missatges",
-    "noMessages": "Sense missatges encara"
+    "noMessages": "Sense missatges encara",
+    "newConversation": "Nova conversa"
   },
   "sidebar": {
     "today": "Hui",

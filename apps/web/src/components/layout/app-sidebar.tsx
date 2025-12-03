@@ -123,7 +123,7 @@ type CreateChatResponse = {
 // ...
 
   const createChatMutation = useMutation({
-    mutationFn: () => client.chat.create({}),
+    mutationFn: () => client.chat.create({ title: t("chat.newConversation") }),
     onSuccess: (data) => {
       const newChat = data as CreateChatResponse;
       const listKey = orpc.chat.list.queryOptions().queryKey;

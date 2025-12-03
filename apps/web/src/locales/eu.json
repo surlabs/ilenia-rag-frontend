@@ -15,7 +15,8 @@
     "notFound": "Elkarrizketa ez da aurkitu",
     "emptyTitle": "Mezurik gabe",
     "emptyDescription": "Elkarrizketa honek oraindik ez du mezurik",
-    "noMessages": "Oraindik mezurik ez"
+    "noMessages": "Oraindik mezurik ez",
+    "newConversation": "Elkarrizketa berria"
   },
   "sidebar": {
     "today": "Gaur",

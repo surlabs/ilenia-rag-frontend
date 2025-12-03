@@ -15,7 +15,8 @@
     "notFound": "Conversa non atopada",
     "emptyTitle": "Sen mensaxes",
     "emptyDescription": "Esta conversa aínda non ten mensaxes",
-    "noMessages": "Sen mensaxes aínda"
+    "noMessages": "Sen mensaxes aínda",
+    "newConversation": "Nova conversa"
   },
   "sidebar": {
     "today": "Hoxe",

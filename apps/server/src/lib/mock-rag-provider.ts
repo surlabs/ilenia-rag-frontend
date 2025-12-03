@@ -9,8 +9,22 @@ type Scenario = {
 };
 
 const DELAY_MS = 30;
+const SIMULATE_FAILURES_COUNT = 2;
 
 export class MockRagProvider implements RagProvider {
+  private predictCallCount = 0;
+
+  private shouldSimulateFailure(): boolean {
+    const simulateFailures = process.env.RAG_MOCK_SIMULATE_FAILURES === 'true';
+    if (!simulateFailures) return false;
+
+    this.predictCallCount++;
+    return this.predictCallCount <= SIMULATE_FAILURES_COUNT;
+  }
+
+  resetFailureCounter(): void {
+    this.predictCallCount = 0;
+  }
   async getConfig(): Promise<{ modes: { language: string; domain: string }[] }> {
     const scenarios = scenariosData as Scenario[];
     
@@ -51,6 +65,12 @@ export class MockRagProvider implements RagProvider {
     language: string;
     domain: string;
   }): AsyncGenerator<RagChunk> {
+    if (this.shouldSimulateFailure()) {
+      throw new Error(
+        `Simulated RAG failure (attempt ${this.predictCallCount}/${SIMULATE_FAILURES_COUNT + 1})`
+      );
+    }
+
     const scenarios = scenariosData as Scenario[];
     
     let match = scenarios.find(s => s.language === params.language && s.domain === params.domain);

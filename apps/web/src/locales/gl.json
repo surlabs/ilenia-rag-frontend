@@ -16,7 +16,12 @@
     "emptyTitle": "Sen mensaxes",
     "emptyDescription": "Esta conversa aínda non ten mensaxes",
     "noMessages": "Sen mensaxes aínda",
-    "newConversation": "Nova conversa"
+    "newConversation": "Nova conversa",
+    "inputPlaceholder": "Escribe a túa mensaxe..."
+  },
+  "status": {
+    "retrying": "Reintentando conexión (intento {{attempt}})...",
+    "error": "Non se puido conectar co servizo. Por favor, inténtao de novo."
   },
   "sidebar": {
     "today": "Hoxe",

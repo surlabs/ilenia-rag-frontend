@@ -16,7 +16,12 @@
     "emptyTitle": "Sin mensajes",
     "emptyDescription": "Esta conversación aún no tiene mensajes",
     "noMessages": "Sin mensajes aún",
-    "newConversation": "Nueva conversación"
+    "newConversation": "Nueva conversación",
+    "inputPlaceholder": "Escribe tu mensaje..."
+  },
+  "status": {
+    "retrying": "Reintentando conexión (intento {{attempt}})...",
+    "error": "No se pudo conectar con el servicio. Por favor, inténtalo de nuevo."
   },
   "sidebar": {
     "today": "Hoy",

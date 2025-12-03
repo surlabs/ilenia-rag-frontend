@@ -16,7 +16,12 @@
     "emptyTitle": "Mezurik gabe",
     "emptyDescription": "Elkarrizketa honek oraindik ez du mezurik",
     "noMessages": "Oraindik mezurik ez",
-    "newConversation": "Elkarrizketa berria"
+    "newConversation": "Elkarrizketa berria",
+    "inputPlaceholder": "Idatzi zure mezua..."
+  },
+  "status": {
+    "retrying": "Konexioa berriro saiatzen ({{attempt}}. saiakera)...",
+    "error": "Ezin izan da zerbitzuarekin konektatu. Mesedez, saiatu berriro."
   },
   "sidebar": {
     "today": "Gaur",

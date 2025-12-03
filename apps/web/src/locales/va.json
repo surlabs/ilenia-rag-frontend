@@ -16,7 +16,12 @@
     "emptyTitle": "Sense missatges",
     "emptyDescription": "Esta conversa encara no té missatges",
     "noMessages": "Sense missatges encara",
-    "newConversation": "Nova conversa"
+    "newConversation": "Nova conversa",
+    "inputPlaceholder": "Escriu el teu missatge..."
+  },
+  "status": {
+    "retrying": "Reintentant connexió (intent {{attempt}})...",
+    "error": "No s'ha pogut connectar amb el servei. Si us plau, torna-ho a provar."
   },
   "sidebar": {
     "today": "Hui",

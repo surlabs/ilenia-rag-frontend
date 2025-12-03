@@ -22,7 +22,7 @@ export class MockRagProvider implements RagProvider {
     return this.predictCallCount <= SIMULATE_FAILURES_COUNT;
   }
 
-  resetFailureCounter(): void {
+  private resetFailureCounter(): void {
     this.predictCallCount = 0;
   }
   async getConfig(): Promise<{ modes: { language: string; domain: string }[] }> {
@@ -114,5 +114,7 @@ export class MockRagProvider implements RagProvider {
       response: "",
       contexts: match.contexts || []
     };
+
+    this.resetFailureCounter();
   }
 }

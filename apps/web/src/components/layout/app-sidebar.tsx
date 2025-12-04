@@ -213,11 +213,13 @@ type CreateChatResponse = {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    await queryClient.cancelQueries();
     authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.refresh();
+          queryClient.clear();
+          router.push("/chat");
         },
       },
     });

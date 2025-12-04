@@ -15,6 +15,10 @@ export const queryClient = new QueryClient({
 	},
 	queryCache: new QueryCache({
 		onError: (error) => {
+			const isAuthError = error.message?.toLowerCase().includes("unauthorized") ||
+				error.message?.toLowerCase().includes("401");
+			if (isAuthError) return;
+
 			toast.error(`Error: ${error.message}`, {
 				action: {
 					label: "retry",

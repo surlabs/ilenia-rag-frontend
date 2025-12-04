@@ -7,7 +7,6 @@ import { Loader } from "@/components/ai-elements/loader";
 import {
   Conversation,
   ConversationContent,
-  ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import {
@@ -28,6 +27,10 @@ import {
   PromptInputTools,
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
+import {
+  SuggestionsPanel,
+  type Suggestion,
+} from "@/components/ai-elements/suggestions-panel";
 import { MessageStatus } from "@/components/message-status";
 import { AssistantAvatar } from "@/components/assistant-avatar";
 import { LoadingDots } from "@/components/loading-dots";
@@ -103,9 +106,8 @@ export default function ChatDetailPage() {
     previousSubmitStatusRef.current = submitStatus;
   }, [submitStatus]);
 
-  const handleSubmit = useCallback(
-    async (message: { text: string }) => {
-      const text = message.text.trim();
+  const sendMessage = useCallback(
+    async (text: string, options: { demo?: boolean; language?: string; domain?: string } = {}) => {
       if (!text || !chat) return;
 
       setSubmitStatus("submitted");
@@ -178,7 +180,9 @@ export default function ChatDetailPage() {
           chatId,
           content: text,
           title,
-          demo: false,
+          demo: options.demo ?? false,
+          language: options.language,
+          domain: options.domain,
         });
 
         for await (const event of stream as AsyncIterable<StreamEvent>) {
@@ -260,6 +264,25 @@ export default function ChatDetailPage() {
     [chat, chatId, queryClient]
   );
 
+  const handleSubmit = useCallback(
+    async (message: { text: string }) => {
+      const text = message.text.trim();
+      await sendMessage(text, { demo: false });
+    },
+    [sendMessage]
+  );
+
+  const handleSuggestionClick = useCallback(
+    async (suggestion: Suggestion) => {
+      await sendMessage(suggestion.question, {
+        demo: true,
+        language: suggestion.language,
+        domain: suggestion.domain,
+      });
+    },
+    [sendMessage]
+  );
+
   if (isLoading || (!chat && !error)) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -282,10 +305,7 @@ export default function ChatDetailPage() {
     <div className="flex h-full flex-col">
       <div className="flex-1 min-h-0 h-full">
         {chat.messages.length === 0 && !streamingMessageId ? (
-          <ConversationEmptyState
-            title={t("chat.emptyTitle")}
-            description={t("chat.emptyDescription")}
-          />
+          <SuggestionsPanel onSuggestionClick={handleSuggestionClick} />
         ) : (
           <Conversation className="h-full">
             <ConversationContent className="max-w-3xl mx-auto pb-4">

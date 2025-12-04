@@ -1,4 +1,24 @@
 {
+  "suggestions": {
+    "title": "En què puc ajudar-te hui?",
+    "subtitle": "Projecte ILENIA: Intel·ligència Artificial Multilingüe",
+    "card1": {
+      "title": "Drets laborals",
+      "description": "Preguntes sobre contractes de treball."
+    },
+    "card2": {
+      "title": "Grip estacional",
+      "description": "Símptomes i prevenció."
+    },
+    "card3": {
+      "title": "Contractació laboral",
+      "description": "Requisits per a empreses."
+    },
+    "card4": {
+      "title": "Targeta sanitària",
+      "description": "Tràmits en el sistema de salut."
+    }
+  },
   "common": {
     "chats": "Xats",
     "newChat": "Nou xat",

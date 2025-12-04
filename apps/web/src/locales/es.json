@@ -1,4 +1,24 @@
 {
+  "suggestions": {
+    "title": "¿En qué puedo ayudarte hoy?",
+    "subtitle": "Proyecto ILENIA: Inteligencia Artificial Multilingüe",
+    "card1": {
+      "title": "Derechos laborales",
+      "description": "Preguntas sobre contratos de trabajo."
+    },
+    "card2": {
+      "title": "Gripe estacional",
+      "description": "Síntomas y prevención."
+    },
+    "card3": {
+      "title": "Contratación laboral",
+      "description": "Requisitos para empresas."
+    },
+    "card4": {
+      "title": "Tarjeta sanitaria",
+      "description": "Trámites en el SERGAS."
+    }
+  },
   "common": {
     "chats": "Chats",
     "newChat": "Nuevo Chat",

@@ -1,4 +1,24 @@
 {
+  "suggestions": {
+    "title": "Zertan lagundu dezaket gaur?",
+    "subtitle": "ILENIA Proiektua: Adimen Artifiziala Eleaniztuna",
+    "card1": {
+      "title": "Lan-eskubideak",
+      "description": "Lan-kontratuen inguruko galderak."
+    },
+    "card2": {
+      "title": "Gripe aroa",
+      "description": "Sintomak eta prebentzioa."
+    },
+    "card3": {
+      "title": "Lan-kontratazioa",
+      "description": "Enpresetarako baldintzak."
+    },
+    "card4": {
+      "title": "Osasun-txartela",
+      "description": "SERGASeko izapideak."
+    }
+  },
   "common": {
     "chats": "Txatak",
     "newChat": "Txat berria",

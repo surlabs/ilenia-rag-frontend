@@ -58,7 +58,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             toast.success(t("auth.signInSuccess"));
           },
           onError: (error) => {
-            toast.error(t("auth.signInError"));
+            toast.error(error.error.message || t("auth.signInError"));
           },
         }
       );
@@ -91,7 +91,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
             toast.success(t("auth.signUpSuccess"));
           },
           onError: (error) => {
-            toast.error(t("auth.signUpError"));
+            toast.error(error.error.message || t("auth.signUpError"));
           },
         }
       );

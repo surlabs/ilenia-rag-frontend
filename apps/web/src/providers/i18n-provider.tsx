@@ -40,7 +40,8 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
-const LOCALE_STORAGE_KEY = "ilenia-locale";
+const LOCALE_COOKIE_NAME = "ilenia-locale";
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
 function getNestedValue(obj: Record<string, unknown>, path: string): string {
 	const keys = path.split(".");
@@ -65,16 +66,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
-		const stored = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale | null;
-		if (stored && translations[stored]) {
-			setLocaleState(stored);
+		const cookieValue = document.cookie
+			.split("; ")
+			.find((row) => row.startsWith(`${LOCALE_COOKIE_NAME}=`))
+			?.split("=")[1] as Locale | undefined;
+
+		if (cookieValue && translations[cookieValue]) {
+			setLocaleState(cookieValue);
 		}
 		setMounted(true);
 	}, []);
 
 	const setLocale = useCallback((newLocale: Locale) => {
 		setLocaleState(newLocale);
-		localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+		document.cookie = `${LOCALE_COOKIE_NAME}=${newLocale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}`;
 		document.documentElement.lang = newLocale;
 	}, []);
 

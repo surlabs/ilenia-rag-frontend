@@ -8,7 +8,7 @@ type Scenario = {
   contexts: Context[] | null;
 };
 
-const DELAY_MS = 30;
+const DELAY_MS = 100;
 const SIMULATE_FAILURES_COUNT = 2;
 
 export class MockRagProvider implements RagProvider {

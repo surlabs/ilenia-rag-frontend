@@ -4,7 +4,7 @@ import { db } from "../db";
 import { chat, message } from "../db/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { logger } from "../lib/logger";
-import { getRagProvider, type Context } from "../lib/rag-adapter";
+import { getRagProvider, getMockProvider, type Context } from "../lib/rag-adapter";
 import { ragDiscoveryService } from "../lib/rag-discovery";
 import { retryWithStatusGenerator } from "../lib/retry-with-status";
 import {
@@ -164,15 +164,15 @@ export const chatRouter = {
 			let ragLanguage: string;
 			let ragDomain: string;
 
-			const provider = getRagProvider();
+			// Demo mode always uses mock provider
+			const provider = demo ? getMockProvider() : getRagProvider();
 
 			if (demo) {
-				// Demo mode: use mock provider with defaults
 				ragLanguage = language || "es";
 				ragDomain = domain || "general";
 				logger.info(
 					{ language: ragLanguage, domain: ragDomain },
-					"sendMessage: Using demo mode"
+					"sendMessage: Using demo mode (mock provider)"
 				);
 			} else if (language && domain) {
 				// Explicit configuration provided
@@ -186,26 +186,31 @@ export const chatRouter = {
 				// Auto-configure using /configure
 				try {
 					const capabilities = ragDiscoveryService.getCapabilities();
+					logger.info({ capabilities }, "sendMessage: Raw capabilities from discovery");
+					
 					const availableConfigs = capabilities
 						.filter((c) => c.language && c.domain)
 						.map((c) => ({
 							language: c.language!,
 							domain: c.domain!,
 						}));
+					
+					logger.info({ availableConfigs, count: availableConfigs.length }, "sendMessage: Filtered available configs");
 
-					const config = await provider.configure({
-						prompt: content,
-						available_configs: availableConfigs,
-						language: language || null,
-						domain: domain || null,
-					});
+				const config = await provider.configure({
+					prompt: content,
+					available_configs: availableConfigs,
+					language: language || null,
+					domain: domain || null,
+				});
 
-					ragLanguage = config.language;
-					ragDomain = config.domain;
-					logger.info(
-						{ language: ragLanguage, domain: ragDomain },
-						"sendMessage: RAG configuration resolved via /configure"
-					);
+				ragLanguage = config.language;
+				ragDomain = config.domain;
+
+				logger.info(
+					{ language: ragLanguage, domain: ragDomain },
+					"sendMessage: RAG configuration resolved via /configure"
+				);
 				} catch (err) {
 					logger.error(
 						{ error: (err as Error).message },
@@ -220,20 +225,49 @@ export const chatRouter = {
 				}
 			}
 
+		// Find backend URL for real provider (not needed for demo/mock)
+		let backendUrl: string | undefined;
+		let predictLanguage = ragLanguage;
+		let predictDomain = ragDomain;
+
+		if (!demo) {
+			const foundBackend = ragDiscoveryService.findBackend(ragLanguage, ragDomain);
+			if (!foundBackend) {
+				logger.error(
+					{ language: ragLanguage, domain: ragDomain },
+					"sendMessage: No backend available for configuration"
+				);
+				yield {
+					type: "status",
+					code: STATUS_ERROR,
+					params: { message: "No backend available for this configuration" },
+				};
+				return;
+			}
+			backendUrl = foundBackend.url;
+			// Use original case from server for predict call
+			predictLanguage = foundBackend.language;
+			predictDomain = foundBackend.domain;
+			logger.info({ backendUrl, language: predictLanguage, domain: predictDomain }, "sendMessage: Backend resolved");
+		}
+
 		// Stream response from RAG with retry logic
 		let fullResponse = "";
 		let sources: Context[] = [];
 
 		const startStream = async () => {
-			const iterator = provider.predict({
-				history: history.map((h) => ({
-					role: h.role,
-					content: h.content,
-				})),
-				prompt: content,
-				language: ragLanguage,
-				domain: ragDomain,
-			});
+			const iterator = provider.predict(
+				{
+					history: history.map((h) => ({
+						role: h.role,
+						content: h.content,
+					})),
+					prompt: content,
+					language: predictLanguage,
+					domain: predictDomain,
+				},
+				backendUrl
+			);
 
 			const first = await iterator.next();
 			if (first.done) {

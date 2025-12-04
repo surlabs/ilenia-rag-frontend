@@ -1,7 +1,15 @@
 import { MockRagProvider } from './mock-rag-provider';
+import { RealRagProvider } from './real-rag-provider';
+import { ragConfigService } from './rag-config';
+import { logger } from './logger';
+
+// Disable SSL verification for development
+if (process.env.NODE_ENV !== 'production') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 
 export interface RagProvider {
-  getConfig(): Promise<{ modes: { language: string; domain: string }[] }>;
+  getConfig(backendUrl?: string): Promise<{ modes: { language: string; domain: string }[] }>;
 
   configure(params: {
     prompt: string;
@@ -10,12 +18,15 @@ export interface RagProvider {
     domain: string | null;
   }): Promise<{ language: string; domain: string }>;
 
-  predict(params: {
-    history: { role: string; content: string }[];
-    prompt: string;
-    language: string;
-    domain: string;
-  }): AsyncGenerator<RagChunk>;
+  predict(
+    params: {
+      history: { role: string; content: string }[];
+      prompt: string;
+      language: string;
+      domain: string;
+    },
+    backendUrl?: string
+  ): AsyncGenerator<RagChunk>;
 }
 
 export type RagChunk = {
@@ -33,18 +44,33 @@ export type Context = {
 };
 
 let providerInstance: RagProvider | null = null;
+let mockProviderInstance: MockRagProvider | null = null;
 
 export function getRagProvider(): RagProvider {
   if (providerInstance) return providerInstance;
 
   const providerType = process.env.RAG_PROVIDER || 'mock';
 
-  if (providerType === 'mock') {
+  if (providerType === 'real') {
+    if (!ragConfigService.isInitialized()) {
+      ragConfigService.initialize();
+    }
+    providerInstance = new RealRagProvider();
+    logger.info('Using RealRagProvider');
+  } else if (providerType === 'mock') {
     providerInstance = new MockRagProvider();
+    logger.info('Using MockRagProvider');
   } else {
-    console.warn(`RAG_PROVIDER '${providerType}' not implemented yet. Falling back to Mock.`);
+    logger.warn({ providerType }, 'Unknown RAG_PROVIDER, falling back to mock');
     providerInstance = new MockRagProvider();
   }
 
   return providerInstance;
+}
+
+export function getMockProvider(): RagProvider {
+  if (!mockProviderInstance) {
+    mockProviderInstance = new MockRagProvider();
+  }
+  return mockProviderInstance;
 }

@@ -28,7 +28,7 @@ export class MockRagProvider implements RagProvider {
   private resetFailureCounter(): void {
     this.predictCallCount = 0;
   }
-  async getConfig(): Promise<{ modes: { language: string; domain: string }[] }> {
+  async getConfig(_backendUrl?: string): Promise<{ modes: { language: string; domain: string }[] }> {
     const scenarios = scenariosData as Scenario[];
     
     const modes = scenarios
@@ -62,12 +62,15 @@ export class MockRagProvider implements RagProvider {
     return { language: 'es', domain: 'general' };
   }
 
-  async *predict(params: {
+  async *predict(
+    params: {
     history: { role: string; content: string }[];
     prompt: string;
     language: string;
     domain: string;
-  }): AsyncGenerator<RagChunk> {
+    },
+    _backendUrl?: string
+  ): AsyncGenerator<RagChunk> {
     if (this.shouldSimulateFailure()) {
       throw new Error(
         `Simulated RAG failure (attempt ${this.predictCallCount}/${SIMULATE_FAILURES_COUNT + 1})`

@@ -1,22 +1,31 @@
 import { logger } from './logger';
 import { getRagProvider } from './rag-adapter';
+import { ragConfigService } from './rag-config';
 
 type BackendUrl = string;
-type CapabilityKey = string; // "lang-domain"
+type CapabilityKey = string; // Normalized key for lookups: "lang-domain" (lowercase)
+
+type CapabilityInfo = {
+  url: BackendUrl;
+  language: string;
+  domain: string;
+};
+
+declare global {
+  // eslint-disable-next-line no-var
+  var ragDiscoveryServiceInstance: RagDiscoveryService | undefined;
+}
 
 class RagDiscoveryService {
-  private static instance: RagDiscoveryService;
-  private capabilityMap: Map<CapabilityKey, BackendUrl> = new Map();
+  private capabilityMap: Map<CapabilityKey, CapabilityInfo> = new Map();
   private pollingInterval: NodeJS.Timeout | null = null;
   private isMock = false;
 
-  private constructor() {}
-
   public static getInstance(): RagDiscoveryService {
-    if (!RagDiscoveryService.instance) {
-      RagDiscoveryService.instance = new RagDiscoveryService();
+    if (!globalThis.ragDiscoveryServiceInstance) {
+      globalThis.ragDiscoveryServiceInstance = new RagDiscoveryService();
     }
-    return RagDiscoveryService.instance;
+    return globalThis.ragDiscoveryServiceInstance;
   }
 
   public async initialize(): Promise<void> {
@@ -29,11 +38,13 @@ class RagDiscoveryService {
         const config = await provider.getConfig();
 
         this.capabilityMap.clear();
-        // For mock, we map capabilities but URL is irrelevant as we use the provider directly
-        // But to satisfy findBackend contract, we can store a "mock" placeholder
         for (const mode of config.modes) {
           const key = this.normalizeKey(mode.language, mode.domain);
-          this.capabilityMap.set(key, 'mock-provider');
+          this.capabilityMap.set(key, {
+            url: 'mock-provider',
+            language: mode.language,
+            domain: mode.domain,
+          });
         }
         logger.info(
           { capabilities: Array.from(this.capabilityMap.keys()) },
@@ -41,12 +52,9 @@ class RagDiscoveryService {
         );
       } catch (error) {
         logger.error({ err: error }, 'Failed to load mock capabilities');
-        // Even in mock, if loading fails, we might want to stop if it's critical,
-        // but usually mock fallback is safer. For consistency with real mode requirement:
         throw new Error('RAG Discovery Initialization Failed: Mock capabilities load error.');
       }
     } else {
-      // Initial active discovery
       await this.refreshCapabilities();
       
       if (this.capabilityMap.size === 0) {
@@ -75,21 +83,43 @@ class RagDiscoveryService {
     }, intervalMs);
   }
 
-  public findBackend(language: string, domain: string): string | null {
+  public findBackend(language: string, domain: string): {
+    url: string;
+    language: string;
+    domain: string;
+  } | null {
     // 1. Exact match
     const exactKey = this.normalizeKey(language, domain);
-    if (this.capabilityMap.has(exactKey))
-      return this.capabilityMap.get(exactKey)!;
+    if (this.capabilityMap.has(exactKey)) {
+      const info = this.capabilityMap.get(exactKey)!;
+      return {
+        url: info.url,
+        language: info.language,
+        domain: info.domain,
+      };
+    }
 
     // 2. Language wildcard
     const langWildcard = this.normalizeKey(language, null); // "lang-*"
-    if (this.capabilityMap.has(langWildcard))
-      return this.capabilityMap.get(langWildcard)!;
+    if (this.capabilityMap.has(langWildcard)) {
+      const info = this.capabilityMap.get(langWildcard)!;
+      return {
+        url: info.url,
+        language: info.language,
+        domain: info.domain,
+      };
+    }
 
     // 3. Domain wildcard
     const domainWildcard = this.normalizeKey(null, domain); // "*-domain"
-    if (this.capabilityMap.has(domainWildcard))
-      return this.capabilityMap.get(domainWildcard)!;
+    if (this.capabilityMap.has(domainWildcard)) {
+      const info = this.capabilityMap.get(domainWildcard)!;
+      return {
+        url: info.url,
+        language: info.language,
+        domain: info.domain,
+      };
+    }
 
     return null;
   }
@@ -104,13 +134,10 @@ class RagDiscoveryService {
       domain: string | null;
       label: string;
     }[] = [];
-    for (const key of this.capabilityMap.keys()) {
-      const [lang, dom] = key.split('-');
-      const language = lang === '*' ? null : lang;
-      const domain = dom === '*' ? null : dom;
+    for (const info of this.capabilityMap.values()) {
+      const language = info.language || null;
+      const domain = info.domain || null;
 
-      // Simple label generation
-      // TODO: Could be improved with i18n
       const langLabel = language ? language.toUpperCase() : 'Multilingüe';
       const domLabel =
         domain ? domain.charAt(0).toUpperCase() + domain.slice(1) : 'General';
@@ -135,27 +162,38 @@ class RagDiscoveryService {
   }
 
   private async refreshCapabilities(): Promise<void> {
-    const servers = (process.env.RAG_SERVERS || '').split(',').filter(Boolean);
+    let servers: string[];
+
+    if (ragConfigService.isInitialized()) {
+      servers = ragConfigService.getServerUrls();
+    } else {
+      servers = (process.env.RAG_SERVERS || '').split(',').map(s => s.trim()).filter(Boolean);
+    }
+
     if (servers.length === 0) {
       logger.warn('No RAG_SERVERS configured for discovery');
       return;
     }
 
-    const newMap = new Map<CapabilityKey, BackendUrl>();
+    const newMap = new Map<CapabilityKey, CapabilityInfo>();
 
     for (const url of servers) {
       try {
-        const config = await this.fetchConfigWithRetry(url.trim());
+        const config = await this.fetchConfigWithRetry(url);
         for (const mode of config.modes) {
           const key = this.normalizeKey(mode.language, mode.domain);
-          newMap.set(key, url.trim());
+          newMap.set(key, {
+            url,
+            language: mode.language,
+            domain: mode.domain,
+          });
         }
+        logger.info({ url, modesCount: config.modes.length }, 'Config fetched successfully');
       } catch (error) {
         logger.error(
           { err: error, url },
           'Failed to fetch config from backend after retries',
         );
-        // Continue to next server
       }
     }
 
@@ -185,15 +223,31 @@ class RagDiscoveryService {
     url: string,
   ): Promise<{ modes: { language: string; domain: string }[] }> {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5s timeout
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (ragConfigService.isInitialized()) {
+      Object.assign(headers, ragConfigService.getAuthHeader(url));
+    }
 
     try {
       const response = await fetch(`${url}/get_config`, {
         signal: controller.signal,
+        headers,
       });
+
+      if (response.status === 401) {
+        logger.error({ url }, 'Authentication failed for RAG backend');
+        throw new Error('Authentication failed');
+      }
+
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
+
       return (await response.json()) as {
         modes: { language: string; domain: string }[];
       };

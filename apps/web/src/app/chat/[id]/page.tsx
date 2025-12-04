@@ -29,6 +29,9 @@ import {
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
 import { MessageStatus } from "@/components/message-status";
+import { AssistantAvatar } from "@/components/assistant-avatar";
+import { LoadingDots } from "@/components/loading-dots";
+import { TypingCursor } from "@/components/typing-cursor";
 import { useTranslation } from "@/providers/i18n-provider";
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { ChatStatus } from "ai";
@@ -76,6 +79,8 @@ export default function ChatDetailPage() {
     enabled: !!chatId,
   });
 
+  const previousSubmitStatusRef = useRef<ChatStatus>("ready");
+
   // Reset states when chatId changes
   useEffect(() => {
     setStreamingContent("");
@@ -84,6 +89,19 @@ export default function ChatDetailPage() {
     setStatusParams(null);
     setSubmitStatus("ready");
   }, [chatId]);
+
+  // Restore focus when streaming finishes
+  useEffect(() => {
+    const wasSubmitting = previousSubmitStatusRef.current === "submitted" || previousSubmitStatusRef.current === "streaming";
+    const isNowReady = submitStatus === "ready" || submitStatus === "error";
+    
+    if (wasSubmitting && isNowReady) {
+      const textarea = document.getElementById("chat-input") as HTMLTextAreaElement;
+      textarea?.focus();
+    }
+    
+    previousSubmitStatusRef.current = submitStatus;
+  }, [submitStatus]);
 
   const handleSubmit = useCallback(
     async (message: { text: string }) => {
@@ -271,37 +289,57 @@ export default function ChatDetailPage() {
         ) : (
           <Conversation className="h-full">
             <ConversationContent className="max-w-3xl mx-auto pb-4">
-              {chat.messages.map((message: ChatMessage) => (
-                <Message key={message.id} from={message.role}>
-                  <MessageContent>
-                    {message.id === streamingMessageId && currentStatusCode ? (
-                      <MessageStatus code={currentStatusCode} params={statusParams ?? undefined} />
-                    ) : (
-                      <MessageResponse>{message.content}</MessageResponse>
-                    )}
-                  </MessageContent>
-                  {message.sources && message.sources.length > 0 && (
-                    <Sources>
-                      <SourcesTrigger count={message.sources.length} />
-                      <SourcesContent>
-                        {message.sources.map((source, idx) => (
-                          <Source key={idx} href={source.url} title={source.title} />
-                        ))}
-                      </SourcesContent>
-                    </Sources>
-                  )}
-                </Message>
-              ))}
+              {chat.messages.map((message: ChatMessage) => {
+                const isAssistant = message.role === "assistant";
+                const isStreaming = message.id === streamingMessageId;
+                const hasContent = message.content.length > 0;
+                const isWaitingForResponse = isStreaming && !hasContent && !currentStatusCode;
+                const isActivelyStreaming = isStreaming && hasContent && !currentStatusCode && submitStatus === "streaming";
+                const hasStatusCode = isStreaming && currentStatusCode;
+
+                return (
+                  <div key={message.id} className={`flex gap-4 ${isAssistant ? "" : "justify-end"}`}>
+                    {isAssistant && <AssistantAvatar className="mt-1" />}
+                    <div className="flex-1 min-w-0">
+                      <Message from={message.role}>
+                        <MessageContent>
+                          {isWaitingForResponse ? (
+                            <LoadingDots />
+                          ) : hasStatusCode ? (
+                            <MessageStatus code={currentStatusCode} params={statusParams ?? undefined} />
+                          ) : (
+                            <div className="inline">
+                              <MessageResponse>{message.content}</MessageResponse>
+                              {isActivelyStreaming && <TypingCursor />}
+                            </div>
+                          )}
+                        </MessageContent>
+                        {message.sources && message.sources.length > 0 && (
+                          <Sources>
+                            <SourcesTrigger count={message.sources.length} />
+                            <SourcesContent>
+                              {message.sources.map((source, idx) => (
+                                <Source key={idx} href={source.url} title={source.title} />
+                              ))}
+                            </SourcesContent>
+                          </Sources>
+                        )}
+                      </Message>
+                    </div>
+                  </div>
+                );
+              })}
             </ConversationContent>
             <ConversationScrollButton />
           </Conversation>
         )}
       </div>
 
-      <div className="border-t bg-background p-4">
+      <div className="bg-background px-4 pb-6 pt-2">
         <div className="max-w-3xl mx-auto">
           <PromptInput onSubmit={handleSubmit}>
             <PromptInputTextarea
+              id="chat-input"
               placeholder={t("chat.inputPlaceholder")}
               disabled={isSubmitting}
             />

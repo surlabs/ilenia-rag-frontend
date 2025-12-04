@@ -61,6 +61,16 @@
     "dark": "Iluna",
     "system": "Sistema"
   },
+  "rag": {
+    "selector": {
+      "label": "Eredua",
+      "auto": "Automatikoa",
+      "autoTitle": "Modu Automatikoa",
+      "autoDescription": "Hizkuntza eta domeinua detektatu",
+      "selectLanguage": "Hautatu hizkuntza bat",
+      "footer": "{{domains}} Domeinu · {{languages}} Hizkuntza"
+    }
+  },
   "auth": {
     "welcomeTitle": "Ongi etorri ILENIAra",
     "createAccount": "Kontua sortu",

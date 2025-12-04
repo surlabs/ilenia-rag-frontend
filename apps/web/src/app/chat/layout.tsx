@@ -11,11 +11,15 @@ export default async function ChatLayout({
 
 	try {
 		const client = await getServerClient();
-		const chats = await client.chat.list();
+		const [chats, ragCapabilities] = await Promise.all([
+			client.chat.list(),
+			client.rag.getCapabilities(),
+		]);
 
 		queryClient.setQueryData(["chat", "list"], chats);
+		queryClient.setQueryData(["rag", "capabilities"], ragCapabilities);
 	} catch {
-		// User not authenticated, will show empty state
+		// User not authenticated or RAG service unavailable
 	}
 
 	return (

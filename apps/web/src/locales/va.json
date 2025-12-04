@@ -61,6 +61,16 @@
     "dark": "Fosc",
     "system": "Sistema"
   },
+  "rag": {
+    "selector": {
+      "label": "Model",
+      "auto": "Automàtic",
+      "autoTitle": "Mode Automàtic",
+      "autoDescription": "Detectar idioma i domini",
+      "selectLanguage": "Selecciona un idioma",
+      "footer": "{{domains}} Dominis · {{languages}} Idiomes"
+    }
+  },
   "auth": {
     "welcomeTitle": "Benvingut a ILENIA",
     "createAccount": "Crear compte",

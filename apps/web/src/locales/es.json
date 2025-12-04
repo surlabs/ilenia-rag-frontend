@@ -61,6 +61,16 @@
     "dark": "Oscuro",
     "system": "Sistema"
   },
+  "rag": {
+    "selector": {
+      "label": "Modelo",
+      "auto": "Automático",
+      "autoTitle": "Modo Automático",
+      "autoDescription": "Detectar idioma y dominio",
+      "selectLanguage": "Selecciona un idioma",
+      "footer": "{{domains}} Dominios · {{languages}} Idiomas"
+    }
+  },
   "auth": {
     "welcomeTitle": "Bienvenido a ILENIA",
     "createAccount": "Crear cuenta",

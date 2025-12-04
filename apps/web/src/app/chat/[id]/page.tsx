@@ -35,6 +35,11 @@ import { MessageStatus } from "@/components/message-status";
 import { AssistantAvatar } from "@/components/assistant-avatar";
 import { LoadingDots } from "@/components/loading-dots";
 import { TypingCursor } from "@/components/typing-cursor";
+import {
+  RagContextSelector,
+  type RagContextValue,
+} from "@/components/rag-context-selector";
+import { useRagCapabilities } from "@/hooks/use-rag-capabilities";
 import { useTranslation } from "@/providers/i18n-provider";
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { ChatStatus } from "ai";
@@ -73,6 +78,9 @@ export default function ChatDetailPage() {
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(null);
   const [currentStatusCode, setCurrentStatusCode] = useState<string | null>(null);
   const [statusParams, setStatusParams] = useState<{ attempt?: number } | null>(null);
+  const [ragContext, setRagContext] = useState<RagContextValue>({ mode: "auto" });
+
+  const { capabilities: ragCapabilities } = useRagCapabilities();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const previousDataRef = useRef<{ chat: any; list: any } | null>(null);
@@ -91,6 +99,7 @@ export default function ChatDetailPage() {
     setCurrentStatusCode(null);
     setStatusParams(null);
     setSubmitStatus("ready");
+    setRagContext({ mode: "auto" });
   }, [chatId]);
 
   // Restore focus when streaming finishes
@@ -267,9 +276,13 @@ export default function ChatDetailPage() {
   const handleSubmit = useCallback(
     async (message: { text: string }) => {
       const text = message.text.trim();
-      await sendMessage(text, { demo: false });
+      await sendMessage(text, {
+        demo: false,
+        language: ragContext.mode === "manual" ? ragContext.language : undefined,
+        domain: ragContext.mode === "manual" ? ragContext.domain : undefined,
+      });
     },
-    [sendMessage]
+    [sendMessage, ragContext]
   );
 
   const handleSuggestionClick = useCallback(
@@ -367,7 +380,14 @@ export default function ChatDetailPage() {
               disabled={isSubmitting}
             />
             <PromptInputFooter>
-              <PromptInputTools />
+              <PromptInputTools>
+                <RagContextSelector
+                  capabilities={ragCapabilities}
+                  value={ragContext}
+                  onChange={setRagContext}
+                  disabled={isSubmitting}
+                />
+              </PromptInputTools>
               <PromptInputSubmit disabled={isSubmitting} status={submitStatus} />
             </PromptInputFooter>
           </PromptInput>

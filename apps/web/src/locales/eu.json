@@ -19,6 +19,11 @@
     "newConversation": "Elkarrizketa berria",
     "inputPlaceholder": "Idatzi zure mezua..."
   },
+  "sources": {
+    "used": "{{count}} iturri erabiliak",
+    "used_one": "Iturri {{count}} erabilia",
+    "used_other": "{{count}} iturri erabiliak"
+  },
   "status": {
     "retrying": "Konexioa berriro saiatzen ({{attempt}}. saiakera)...",
     "error": "Ezin izan da zerbitzuarekin konektatu. Mesedez, saiatu berriro."

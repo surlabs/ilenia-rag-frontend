@@ -30,7 +30,7 @@ type NestedKeyOf<T> = T extends object
 
 type TranslationKey = NestedKeyOf<Translations>;
 
-type InterpolationParams = Record<string, string | undefined>;
+type InterpolationParams = Record<string, string | number | undefined>;
 
 interface I18nContextType {
 	locale: Locale;
@@ -58,7 +58,10 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
 
 function interpolate(template: string, params?: InterpolationParams): string {
 	if (!params) return template;
-	return template.replace(/\{\{(\w+)\}\}/g, (_, key) => params[key] ?? `{{${key}}}`);
+	return template.replace(/\{\{(\w+)\}\}/g, (_, key) => {
+		const value = params[key];
+		return value !== undefined ? String(value) : `{{${key}}}`;
+	});
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -85,7 +88,17 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
 	const t = useCallback(
 		(key: TranslationKey, params?: InterpolationParams): string => {
-			const template = getNestedValue(translations[locale] as unknown as Record<string, unknown>, key);
+			let resolvedKey = key;
+			if (params?.count !== undefined) {
+				const count = Number(params.count);
+				const suffix = count === 1 ? "_one" : "_other";
+				const pluralKey = `${key}${suffix}`;
+				const pluralValue = getNestedValue(translations[locale] as unknown as Record<string, unknown>, pluralKey);
+				if (pluralValue !== pluralKey) {
+					resolvedKey = pluralKey as TranslationKey;
+				}
+			}
+			const template = getNestedValue(translations[locale] as unknown as Record<string, unknown>, resolvedKey);
 			return interpolate(template, params);
 		},
 		[locale]
@@ -97,8 +110,21 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 	);
 
 	if (!mounted) {
+		const fallbackT = (key: TranslationKey, params?: InterpolationParams): string => {
+			let resolvedKey = key;
+			if (params?.count !== undefined) {
+				const count = Number(params.count);
+				const suffix = count === 1 ? "_one" : "_other";
+				const pluralKey = `${key}${suffix}`;
+				const pluralValue = getNestedValue(esTranslations as unknown as Record<string, unknown>, pluralKey);
+				if (pluralValue !== pluralKey) {
+					resolvedKey = pluralKey as TranslationKey;
+				}
+			}
+			return interpolate(getNestedValue(esTranslations as unknown as Record<string, unknown>, resolvedKey), params);
+		};
 		return (
-			<I18nContext.Provider value={{ locale: "es", setLocale: () => {}, t: (key, params) => interpolate(getNestedValue(esTranslations as unknown as Record<string, unknown>, key), params) }}>
+			<I18nContext.Provider value={{ locale: "es", setLocale: () => {}, t: fallbackT }}>
 				{children}
 			</I18nContext.Provider>
 		);

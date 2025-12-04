@@ -19,6 +19,11 @@
     "newConversation": "Nova conversa",
     "inputPlaceholder": "Escribe a túa mensaxe..."
   },
+  "sources": {
+    "used": "{{count}} fontes utilizadas",
+    "used_one": "{{count}} fonte utilizada",
+    "used_other": "{{count}} fontes utilizadas"
+  },
   "status": {
     "retrying": "Reintentando conexión (intento {{attempt}})...",
     "error": "Non se puido conectar co servizo. Por favor, inténtao de novo."

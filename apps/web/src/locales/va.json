@@ -19,6 +19,11 @@
     "newConversation": "Nova conversa",
     "inputPlaceholder": "Escriu el teu missatge..."
   },
+  "sources": {
+    "used": "{{count}} fonts utilitzades",
+    "used_one": "{{count}} font utilitzada",
+    "used_other": "{{count}} fonts utilitzades"
+  },
   "status": {
     "retrying": "Reintentant connexió (intent {{attempt}})...",
     "error": "No s'ha pogut connectar amb el servei. Si us plau, torna-ho a provar."

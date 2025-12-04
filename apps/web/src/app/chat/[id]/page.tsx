@@ -316,7 +316,10 @@ export default function ChatDetailPage() {
                         </MessageContent>
                         {message.sources && message.sources.length > 0 && (
                           <Sources>
-                            <SourcesTrigger count={message.sources.length} />
+                            <SourcesTrigger 
+                              count={message.sources.length} 
+                              label={t("sources.used", { count: message.sources.length })}
+                            />
                             <SourcesContent>
                               {message.sources.map((source, idx) => (
                                 <Source key={idx} href={source.url} title={source.title} />

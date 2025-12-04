@@ -20,11 +20,13 @@ export const Sources = ({ className, ...props }: SourcesProps) => (
 
 export type SourcesTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
   count: number;
+  label?: string;
 };
 
 export const SourcesTrigger = ({
   className,
   count,
+  label,
   children,
   ...props
 }: SourcesTriggerProps) => (
@@ -34,7 +36,7 @@ export const SourcesTrigger = ({
   >
     {children ?? (
       <>
-        <p className="font-medium">Used {count} sources</p>
+        <p className="font-medium">{label ?? `Used ${count} sources`}</p>
         <ChevronDownIcon className="h-4 w-4" />
       </>
     )}

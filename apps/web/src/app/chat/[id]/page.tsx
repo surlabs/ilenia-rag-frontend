@@ -262,14 +262,14 @@ export default function ChatDetailPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 h-full">
         {chat.messages.length === 0 && !streamingMessageId ? (
           <ConversationEmptyState
             title={t("chat.emptyTitle")}
             description={t("chat.emptyDescription")}
           />
         ) : (
-          <Conversation>
+          <Conversation className="h-full">
             <ConversationContent className="max-w-3xl mx-auto pb-4">
               {chat.messages.map((message: ChatMessage) => (
                 <Message key={message.id} from={message.role}>

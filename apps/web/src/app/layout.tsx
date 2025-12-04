@@ -34,9 +34,9 @@ export default function RootLayout({
 				<Providers>
 					<SidebarProvider>
 						<AppSidebar />
-						<SidebarInset>
+						<SidebarInset className="flex flex-col h-screen">
 							<Header />
-							<main className="flex-1 overflow-auto">
+							<main className="flex-1 overflow-hidden">
 								{children}
 							</main>
 						</SidebarInset>

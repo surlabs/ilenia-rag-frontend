@@ -291,11 +291,11 @@ type CreateChatResponse = {
       <SidebarHeader className="border-b border-sidebar-border">
         <div className="flex items-center justify-between px-2 py-1">
           <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-600 text-white shadow-sm">
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-ilenia text-white shadow-sm">
               <MessageCircle className="h-4 w-4" />
             </div>
             <span className="text-sm">
-              ILENIA<span className="text-sky-600">Chat</span>
+              ILENIA<span className="text-ilenia">Chat</span>
             </span>
           </Link>
           {isLoggedIn && (
@@ -349,7 +349,7 @@ type CreateChatResponse = {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="flex w-full items-center gap-3 rounded-lg p-2 hover:bg-sidebar-accent transition-colors group">
-                <div className="flex h-8 w-8 items-center justify-center rounded-md border border-sky-200 bg-sky-100 text-xs font-semibold text-sky-700 group-hover:border-sky-300 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-300">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md border border-ilenia-light/30 bg-ilenia-light/20 text-xs font-semibold text-ilenia group-hover:border-ilenia-light/50 dark:border-ilenia/30 dark:bg-ilenia/20 dark:text-ilenia-light">
                   {session.user.name?.slice(0, 2).toUpperCase() || "U"}
                 </div>
                 <div className="flex-1 text-left min-w-0">

@@ -59,8 +59,8 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
             router.push("/chat");
             toast.success(t("auth.signInSuccess"));
           },
-          onError: (error) => {
-            toast.error(error.error.message || t("auth.signInError"));
+          onError: () => {
+            toast.error(t("auth.signInError"));
           },
         }
       );
@@ -92,8 +92,8 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
             router.push("/chat");
             toast.success(t("auth.signUpSuccess"));
           },
-          onError: (error) => {
-            toast.error(error.error.message || t("auth.signUpError"));
+          onError: () => {
+            toast.error(t("auth.signUpError"));
           },
         }
       );
@@ -117,7 +117,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
         onEscapeKeyDown={required ? (e) => e.preventDefault() : undefined}
       >
         <DialogHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-sky-600 text-white shadow-lg shadow-sky-500/30">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-ilenia text-white shadow-lg shadow-ilenia/30">
             <MessageSquare className="h-6 w-6" />
           </div>
           <DialogTitle className="text-2xl">
@@ -196,7 +196,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
               <button
                 type="button"
                 onClick={() => setMode("signUp")}
-                className="text-sky-600 hover:underline"
+                className="text-ilenia hover:underline"
               >
                 {t("auth.register")}
               </button>
@@ -288,7 +288,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
               <button
                 type="button"
                 onClick={() => setMode("signIn")}
-                className="text-sky-600 hover:underline"
+                className="text-ilenia hover:underline"
               >
                 {t("auth.signInLink")}
               </button>

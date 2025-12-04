@@ -19,9 +19,9 @@ export const queryClient = new QueryClient({
 				error.message?.toLowerCase().includes("401");
 			if (isAuthError) return;
 
-			toast.error(`Error: ${error.message}`, {
+			toast.error("Ha ocurrido un error. Por favor, inténtalo de nuevo.", {
 				action: {
-					label: "retry",
+					label: "Reintentar",
 					onClick: () => {
 						queryClient.invalidateQueries();
 					},

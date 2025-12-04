@@ -27,15 +27,17 @@ interface AuthModalProps {
   trigger?: React.ReactNode;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  required?: boolean;
 }
 
-export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps) {
+export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("signIn");
   const [open, setOpen] = useState(defaultOpen ?? false);
   const router = useRouter();
   const { t } = useTranslation();
 
   const handleOpenChange = (newOpen: boolean) => {
+    if (required && !newOpen) return;
     setOpen(newOpen);
     onOpenChange?.(newOpen);
   };
@@ -108,7 +110,12 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange }: AuthModalProps
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        className="sm:max-w-md"
+        showCloseButton={!required}
+        onInteractOutside={required ? (e) => e.preventDefault() : undefined}
+        onEscapeKeyDown={required ? (e) => e.preventDefault() : undefined}
+      >
         <DialogHeader className="text-center">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-sky-600 text-white shadow-lg shadow-sky-500/30">
             <MessageSquare className="h-6 w-6" />

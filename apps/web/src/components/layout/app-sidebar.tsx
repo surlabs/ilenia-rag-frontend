@@ -379,6 +379,7 @@ type CreateChatResponse = {
           <div className="p-2">
             <AuthModal
               defaultOpen={true}
+              required={true}
               trigger={
                 <Button variant="outline" className="w-full">
                   {t("common.signIn")}

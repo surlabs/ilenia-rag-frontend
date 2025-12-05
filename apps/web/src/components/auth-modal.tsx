@@ -33,6 +33,7 @@ interface AuthModalProps {
 export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("signIn");
   const [open, setOpen] = useState(defaultOpen ?? false);
+  const [signInError, setSignInError] = useState<string | null>(null);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -48,6 +49,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
       password: "",
     },
     onSubmit: async ({ value }) => {
+      setSignInError(null);
       await authClient.signIn.email(
         {
           email: value.email,
@@ -60,7 +62,7 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
             toast.success(t("auth.signInSuccess"));
           },
           onError: () => {
-            toast.error(t("auth.signInError"));
+            setSignInError(t("auth.invalidCredentials"));
           },
         }
       );
@@ -179,6 +181,10 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
               )}
             </signInForm.Field>
 
+            {signInError && (
+              <p className="text-sm text-red-500 text-center">{signInError}</p>
+            )}
+
             <signInForm.Subscribe>
               {(state) => (
                 <Button
@@ -195,7 +201,10 @@ export function AuthModal({ trigger, defaultOpen, onOpenChange, required = false
               {t("auth.noAccount")}{" "}
               <button
                 type="button"
-                onClick={() => setMode("signUp")}
+                onClick={() => {
+                  setSignInError(null);
+                  setMode("signUp");
+                }}
                 className="text-ilenia hover:underline"
               >
                 {t("auth.register")}

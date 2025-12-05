@@ -103,6 +103,7 @@
     "signInLink": "Inicia sesión",
     "signInSuccess": "Sesión iniciada correctamente",
     "signInError": "Erro ao iniciar sesión",
+    "invalidCredentials": "As credenciais non son válidas",
     "signUpSuccess": "Conta creada correctamente",
     "signUpError": "Erro ao crear conta"
   }

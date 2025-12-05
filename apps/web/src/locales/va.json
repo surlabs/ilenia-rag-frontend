@@ -103,6 +103,7 @@
     "signInLink": "Inicia sessió",
     "signInSuccess": "Sessió iniciada correctament",
     "signInError": "Error en iniciar sessió",
+    "invalidCredentials": "Les credencials no són vàlides",
     "signUpSuccess": "Compte creat correctament",
     "signUpError": "Error en crear compte"
   }

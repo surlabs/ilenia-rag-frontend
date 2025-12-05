@@ -103,6 +103,7 @@
     "signInLink": "Hasi saioa",
     "signInSuccess": "Saioa ondo hasi da",
     "signInError": "Errorea saioa hastean",
+    "invalidCredentials": "Kredentzialak ez dira baliozkoak",
     "signUpSuccess": "Kontua ondo sortu da",
     "signUpError": "Errorea kontua sortzean"
   }

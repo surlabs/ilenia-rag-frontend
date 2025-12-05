@@ -17,6 +17,17 @@
     "card4": {
       "title": "Tarjeta sanitaria",
       "description": "Trámites en el SERGAS."
+    },
+    "domains": {
+      "legal": "Legal",
+      "health": "Salud",
+      "general": "General"
+    },
+    "languages": {
+      "eu": "Euskera",
+      "gl": "Gallego",
+      "va": "Valencià",
+      "es": "Castellano"
     }
   },
   "common": {

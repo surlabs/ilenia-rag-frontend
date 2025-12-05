@@ -3,10 +3,6 @@ import { RealRagProvider } from './real-rag-provider';
 import { ragConfigService } from './rag-config';
 import { logger } from './logger';
 
-// Disable SSL verification for development
-if (process.env.NODE_ENV !== 'production') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
 
 export interface RagProvider {
   getConfig(backendUrl?: string): Promise<{ modes: { language: string; domain: string }[] }>;

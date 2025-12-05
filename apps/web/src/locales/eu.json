@@ -17,6 +17,17 @@
     "card4": {
       "title": "Osasun-txartela",
       "description": "SERGASeko izapideak."
+    },
+    "domains": {
+      "legal": "Legea",
+      "health": "Osasuna",
+      "general": "Orokorra"
+    },
+    "languages": {
+      "eu": "Euskera",
+      "gl": "Galegoa",
+      "va": "Valentziera",
+      "es": "Gaztelania"
     }
   },
   "common": {

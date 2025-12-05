@@ -17,6 +17,17 @@
     "card4": {
       "title": "Targeta sanitària",
       "description": "Tràmits en el sistema de salut."
+    },
+    "domains": {
+      "legal": "Legal",
+      "health": "Salut",
+      "general": "General"
+    },
+    "languages": {
+      "eu": "Euskera",
+      "gl": "Gallec",
+      "va": "Valencià",
+      "es": "Castellà"
     }
   },
   "common": {

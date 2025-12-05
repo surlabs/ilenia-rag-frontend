@@ -8,7 +8,6 @@ import { useTranslation } from "@/providers/i18n-provider";
 
 export type Suggestion = {
   key: string;
-  badge: string;
   badgeColor: "ilenia" | "emerald";
   titleKey: string;
   descriptionKey: string;
@@ -20,7 +19,6 @@ export type Suggestion = {
 export const SUGGESTIONS: Suggestion[] = [
   {
     key: "eu-legal",
-    badge: "Legal · Euskera",
     badgeColor: "ilenia",
     titleKey: "suggestions.card1.title",
     descriptionKey: "suggestions.card1.description",
@@ -30,7 +28,6 @@ export const SUGGESTIONS: Suggestion[] = [
   },
   {
     key: "gl-health",
-    badge: "Salud · Gallego",
     badgeColor: "emerald",
     titleKey: "suggestions.card2.title",
     descriptionKey: "suggestions.card2.description",
@@ -40,7 +37,6 @@ export const SUGGESTIONS: Suggestion[] = [
   },
   {
     key: "va-general",
-    badge: "Legal · Valencià",
     badgeColor: "ilenia",
     titleKey: "suggestions.card3.title",
     descriptionKey: "suggestions.card3.description",
@@ -50,7 +46,6 @@ export const SUGGESTIONS: Suggestion[] = [
   },
   {
     key: "gl-health-2",
-    badge: "Salud · Gallego",
     badgeColor: "emerald",
     titleKey: "suggestions.card4.title",
     descriptionKey: "suggestions.card4.description",
@@ -89,16 +84,22 @@ export const SuggestionsPanel = ({
         {t("suggestions.subtitle")}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
-        {SUGGESTIONS.map((suggestion) => (
-          <SuggestionCard
-            key={suggestion.key}
-            badge={suggestion.badge}
-            badgeColor={suggestion.badgeColor}
-            title={t(suggestion.titleKey)}
-            description={t(suggestion.descriptionKey)}
-            onClick={() => onSuggestionClick(suggestion)}
-          />
-        ))}
+        {SUGGESTIONS.map((suggestion) => {
+          const domainLabel = t(`suggestions.domains.${suggestion.domain}`);
+          const languageLabel = t(`suggestions.languages.${suggestion.language}`);
+          const badge = `${domainLabel} · ${languageLabel}`;
+
+          return (
+            <SuggestionCard
+              key={suggestion.key}
+              badge={badge}
+              badgeColor={suggestion.badgeColor}
+              title={t(suggestion.titleKey)}
+              description={t(suggestion.descriptionKey)}
+              onClick={() => onSuggestionClick(suggestion)}
+            />
+          );
+        })}
       </div>
     </div>
   );

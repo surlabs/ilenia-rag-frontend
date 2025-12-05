@@ -17,6 +17,17 @@
     "card4": {
       "title": "Tarxeta sanitaria",
       "description": "Trámites no SERGAS."
+    },
+    "domains": {
+      "legal": "Legal",
+      "health": "Saúde",
+      "general": "Xeral"
+    },
+    "languages": {
+      "eu": "Euskera",
+      "gl": "Galego",
+      "va": "Valenciano",
+      "es": "Castelán"
     }
   },
   "common": {

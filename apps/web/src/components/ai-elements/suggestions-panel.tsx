@@ -85,8 +85,11 @@ export const SuggestionsPanel = ({
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-lg">
         {SUGGESTIONS.map((suggestion) => {
-          const domainLabel = t(`suggestions.domains.${suggestion.domain}`);
-          const languageLabel = t(`suggestions.languages.${suggestion.language}`);
+          // TypeScript cannot infer that template literal keys and string properties are valid TranslationKey types
+          // even though these keys exist in the translation files. Using 'as any' to bypass
+          // the type check since we know the keys are valid at runtime.
+          const domainLabel = t(`suggestions.domains.${suggestion.domain}` as any);
+          const languageLabel = t(`suggestions.languages.${suggestion.language}` as any);
           const badge = `${domainLabel} · ${languageLabel}`;
 
           return (
@@ -94,8 +97,8 @@ export const SuggestionsPanel = ({
               key={suggestion.key}
               badge={badge}
               badgeColor={suggestion.badgeColor}
-              title={t(suggestion.titleKey)}
-              description={t(suggestion.descriptionKey)}
+              title={t(suggestion.titleKey as any)}
+              description={t(suggestion.descriptionKey as any)}
               onClick={() => onSuggestionClick(suggestion)}
             />
           );

@@ -1,4 +1,4 @@
-import { RagProvider, RagChunk, Context } from './rag-adapter';
+import type { RagProvider, RagChunk, Context } from './rag-adapter';
 import scenariosData from './demo-scenarios.json';
 
 type Scenario = {

@@ -1,4 +1,4 @@
-import { RagProvider, RagChunk } from './rag-adapter';
+import type { RagProvider, RagChunk } from './rag-adapter';
 import { ragConfigService } from './rag-config';
 import { parseSSEStream } from './sse-parser';
 import { logger } from './logger';

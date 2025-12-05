@@ -143,7 +143,7 @@ export function RagContextSelector({
       return t("rag.selector.auto");
     }
     if (value.domain && value.language) {
-      return `${value.domain} · ${value.language}`;
+      return `${value.language} · ${value.domain}`;
     }
     return t("rag.selector.auto");
   }, [value, t]);

@@ -378,6 +378,7 @@ export default function ChatDetailPage() {
               id="chat-input"
               placeholder={t("chat.inputPlaceholder")}
               disabled={isSubmitting}
+              maxLength={5000}
             />
             <PromptInputFooter>
               <PromptInputTools>

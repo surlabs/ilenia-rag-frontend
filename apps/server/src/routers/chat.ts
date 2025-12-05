@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure } from "../lib/orpc";
 import { db } from "../db";
 import { chat, message } from "../db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { logger } from "../lib/logger";
 import { getRagProvider, getMockProvider, type Context } from "../lib/rag-adapter";
 import { ragDiscoveryService } from "../lib/rag-discovery";
@@ -59,11 +59,14 @@ export const chatRouter = {
 				return null;
 			}
 
-			const messages = await db
-				.select()
-				.from(message)
-				.where(eq(message.chatId, input.id))
-				.orderBy(message.createdAt);
+		const messages = await db
+			.select()
+			.from(message)
+			.where(eq(message.chatId, input.id))
+			.orderBy(
+				message.createdAt,
+				sql`CASE WHEN ${message.role} = 'user' THEN 0 WHEN ${message.role} = 'assistant' THEN 1 ELSE 2 END`
+			);
 
 			return {
 				...chatData,
@@ -153,12 +156,15 @@ export const chatRouter = {
 				createdAt: new Date(),
 			});
 
-			// Load chat history for RAG context
-			const history = await db
-				.select({ role: message.role, content: message.content })
-				.from(message)
-				.where(eq(message.chatId, chatId))
-				.orderBy(message.createdAt);
+		// Load chat history for RAG context
+		const history = await db
+			.select({ role: message.role, content: message.content })
+			.from(message)
+			.where(eq(message.chatId, chatId))
+			.orderBy(
+				message.createdAt,
+				sql`CASE WHEN ${message.role} = 'user' THEN 0 WHEN ${message.role} = 'assistant' THEN 1 ELSE 2 END`
+			);
 
 			// Determine RAG configuration
 			let ragLanguage: string;

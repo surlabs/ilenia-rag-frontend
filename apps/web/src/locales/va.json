@@ -3,20 +3,20 @@
     "title": "En què puc ajudar-te hui?",
     "subtitle": "Projecte ILENIA: Intel·ligència Artificial Multilingüe",
     "card1": {
-      "title": "Drets laborals",
-      "description": "Preguntes sobre contractes de treball."
+      "title": "Drets lingüístics",
+      "description": "Ús de l'euskera en l'administració."
     },
     "card2": {
-      "title": "Grip estacional",
-      "description": "Símptomes i prevenció."
+      "title": "Sistema de salut",
+      "description": "El SERGAS a Galícia."
     },
     "card3": {
-      "title": "Contractació laboral",
-      "description": "Requisits per a empreses."
+      "title": "Llengua valenciana",
+      "description": "Drets i cultura."
     },
     "card4": {
-      "title": "Targeta sanitària",
-      "description": "Tràmits en el sistema de salut."
+      "title": "Projecte Ilenia",
+      "description": "IA multilingüe a Espanya."
     },
     "domains": {
       "legal": "Legal",

@@ -24,7 +24,7 @@ export const SUGGESTIONS: Suggestion[] = [
     descriptionKey: "suggestions.card1.description",
     language: "eu",
     domain: "legal",
-    question: "Zein dira nire eskubideak lan-kontratu batean?",
+    question: "Zein dira nire hizkuntza eskubideak administrazioan?",
   },
   {
     key: "gl-health",
@@ -33,7 +33,7 @@ export const SUGGESTIONS: Suggestion[] = [
     descriptionKey: "suggestions.card2.description",
     language: "gl",
     domain: "health",
-    question: "Cales son os síntomas da gripe estacional?",
+    question: "Como funciona o sistema público de saúde en Galicia?",
   },
   {
     key: "va-general",
@@ -42,16 +42,16 @@ export const SUGGESTIONS: Suggestion[] = [
     descriptionKey: "suggestions.card3.description",
     language: "va",
     domain: "general",
-    question: "Quins requisits necessita una empresa per contractar?",
+    question: "Quins són els drets lingüístics dels valencians?",
   },
   {
-    key: "gl-health-2",
+    key: "es-general",
     badgeColor: "emerald",
     titleKey: "suggestions.card4.title",
     descriptionKey: "suggestions.card4.description",
-    language: "gl",
-    domain: "health",
-    question: "Como solicitar a tarxeta sanitaria en Galicia?",
+    language: "es",
+    domain: "general",
+    question: "¿Qué es el proyecto Ilenia y cuáles son sus objetivos?",
   },
 ];
 

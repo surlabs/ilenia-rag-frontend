@@ -3,20 +3,20 @@
     "title": "En que podo axudarte hoxe?",
     "subtitle": "Proxecto ILENIA: Intelixencia Artificial Multilingüe",
     "card1": {
-      "title": "Dereitos laborais",
-      "description": "Preguntas sobre contratos de traballo."
+      "title": "Dereitos lingüísticos",
+      "description": "Uso do euskera na administración."
     },
     "card2": {
-      "title": "Gripe estacional",
-      "description": "Síntomas e prevención."
+      "title": "Sistema de saúde",
+      "description": "O SERGAS en Galicia."
     },
     "card3": {
-      "title": "Contratación laboral",
-      "description": "Requisitos para empresas."
+      "title": "Lingua valenciana",
+      "description": "Dereitos e cultura."
     },
     "card4": {
-      "title": "Tarxeta sanitaria",
-      "description": "Trámites no SERGAS."
+      "title": "Proxecto Ilenia",
+      "description": "IA multilingüe en España."
     },
     "domains": {
       "legal": "Legal",

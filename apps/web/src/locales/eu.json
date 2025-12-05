@@ -3,20 +3,20 @@
     "title": "Zertan lagundu dezaket gaur?",
     "subtitle": "ILENIA Proiektua: Adimen Artifiziala Eleaniztuna",
     "card1": {
-      "title": "Lan-eskubideak",
-      "description": "Lan-kontratuen inguruko galderak."
+      "title": "Hizkuntza eskubideak",
+      "description": "Euskara administrazioan."
     },
     "card2": {
-      "title": "Gripe aroa",
-      "description": "Sintomak eta prebentzioa."
+      "title": "Osasun sistema",
+      "description": "Galiziako SERGAS."
     },
     "card3": {
-      "title": "Lan-kontratazioa",
-      "description": "Enpresetarako baldintzak."
+      "title": "Valentziera",
+      "description": "Eskubideak eta kultura."
     },
     "card4": {
-      "title": "Osasun-txartela",
-      "description": "SERGASeko izapideak."
+      "title": "Ilenia proiektua",
+      "description": "AA eleaniztuna Espainian."
     },
     "domains": {
       "legal": "Legea",

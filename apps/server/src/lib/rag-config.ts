@@ -1,5 +1,11 @@
 import { logger } from './logger';
 
+const isDev = process.env.NODE_ENV !== 'production';
+if (isDev) {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  logger.warn('Development mode: TLS certificate verification is disabled');
+}
+
 declare global {
   // eslint-disable-next-line no-var
   var ragConfigServiceInstance: RagConfigService | undefined;
@@ -28,16 +34,10 @@ class RagConfigService {
     const masterUrl = process.env.RAG_MASTER_URL || '';
 
     const serverUrls = serversEnv.split(',').map(s => s.trim()).filter(Boolean);
-    const credentials = credentialsEnv.split(',').map(c => c.trim()).filter(Boolean);
+    const credentials = credentialsEnv.split(',').map(c => c.trim());
 
     if (serverUrls.length === 0) {
       throw new Error('RAG_SERVERS is required when RAG_PROVIDER=real');
-    }
-
-    if (serverUrls.length !== credentials.length) {
-      throw new Error(
-        `Mismatch between RAG_SERVERS (${serverUrls.length}) and RAG_SERVER_CREDENTIALS (${credentials.length}) count`
-      );
     }
 
     if (!masterUrl) {
@@ -52,9 +52,22 @@ class RagConfigService {
     this.servers = [];
     this.credentialsMap.clear();
 
+    const withCredentials: string[] = [];
+    const withoutCredentials: string[] = [];
+
     for (let i = 0; i < serverUrls.length; i++) {
       const url = serverUrls[i];
-      const [user, password] = this.parseCredentials(credentials[i]);
+      const credentialRaw = credentials[i]?.trim();
+      let user = '';
+      let password = '';
+
+      if (credentialRaw) {
+        [user, password] = this.parseCredentials(credentialRaw);
+        this.credentialsMap.set(url, { user, password });
+        withCredentials.push(url);
+      } else {
+        withoutCredentials.push(url);
+      }
 
       const config: RagServerConfig = {
         url,
@@ -64,13 +77,17 @@ class RagConfigService {
       };
 
       this.servers.push(config);
-      this.credentialsMap.set(url, { user, password });
     }
 
     this.initialized = true;
 
     logger.info(
-      { serverCount: this.servers.length, masterUrl: this.masterUrl },
+      {
+        serverCount: this.servers.length,
+        masterUrl: this.masterUrl,
+        withCredentials,
+        withoutCredentials,
+      },
       'RAG config initialized'
     );
   }

@@ -193,30 +193,42 @@ export const chatRouter = {
 				try {
 					const capabilities = ragDiscoveryService.getCapabilities();
 					logger.info({ capabilities }, "sendMessage: Raw capabilities from discovery");
-					
+
 					const availableConfigs = capabilities
 						.filter((c) => c.language && c.domain)
 						.map((c) => ({
 							language: c.language!,
 							domain: c.domain!,
 						}));
-					
+
 					logger.info({ availableConfigs, count: availableConfigs.length }, "sendMessage: Filtered available configs");
+					logger.info(
+						{
+							configurePayload: {
+								available_configs: availableConfigs,
+								language: language || null,
+								domain: domain || null,
+							},
+							promptLength: content.length,
+						},
+						"sendMessage: Calling /configure with payload"
+					);
 
-				const config = await provider.configure({
-					prompt: content,
-					available_configs: availableConfigs,
-					language: language || null,
-					domain: domain || null,
-				});
+					const config = await provider.configure({
+						prompt: content,
+						available_configs: availableConfigs,
+						language: language || null,
+						domain: domain || null,
+					});
 
-				ragLanguage = config.language;
-				ragDomain = config.domain;
+					logger.info(
+						{ config },
+						"sendMessage: /configure response"
+					);
 
-				logger.info(
-					{ language: ragLanguage, domain: ragDomain },
-					"sendMessage: RAG configuration resolved via /configure"
-				);
+					ragLanguage = config.language;
+					ragDomain = config.domain;
+
 				} catch (err) {
 					logger.error(
 						{ error: (err as Error).message },

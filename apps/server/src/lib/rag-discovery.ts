@@ -55,12 +55,14 @@ class RagDiscoveryService {
         throw new Error('RAG Discovery Initialization Failed: Mock capabilities load error.');
       }
     } else {
-      await this.refreshCapabilities();
-      
+      try {
+        await this.refreshCapabilities();
+      } catch (error) {
+        logger.error({ err: error }, 'Initial discovery refresh failed');
+      }
+
       if (this.capabilityMap.size === 0) {
-        const msg = 'RAG Discovery Initialization Failed: No capabilities found from any host.';
-        logger.fatal(msg);
-        throw new Error(msg);
+        logger.warn('Discovery initialized with 0 capabilities; will keep polling');
       }
     }
   }

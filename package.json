@@ -31,5 +31,8 @@
 		"turbo": "^2.5.4",
 		"ultracite": "5.2.4"
 	},
-	"packageManager": "npm@11.5.2"
+	"packageManager": "npm@11.5.2",
+	"dependencies": {
+		"ci": "^2.3.0"
+	}
 }

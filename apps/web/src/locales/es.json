@@ -19,6 +19,9 @@
       "description": "Presidente de las Corts Valencianes."
     },
     "domains": {
+      "legal": "Legal",
+      "health": "Salud",
+      "general": "General",
       "bopv": "BOPV",
       "boja": "BOJA",
       "noticias": "Noticias",

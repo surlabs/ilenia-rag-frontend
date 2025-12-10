@@ -21,7 +21,11 @@
     "domains": {
       "legal": "Legea",
       "health": "Osasuna",
-      "general": "Orokorra"
+      "general": "Orokorra",
+      "bopv": "EHAA",
+      "boja": "BOJA",
+      "noticias": "Albisteak",
+      "parliament": "Legebiltzarra"
     },
     "languages": {
       "eu": "Euskera",

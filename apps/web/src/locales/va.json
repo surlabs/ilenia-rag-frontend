@@ -21,7 +21,11 @@
     "domains": {
       "legal": "Legal",
       "health": "Salut",
-      "general": "General"
+      "general": "General",
+      "bopv": "BOPV",
+      "boja": "BOJA",
+      "noticias": "Notícies",
+      "parliament": "Parlament"
     },
     "languages": {
       "eu": "Euskera",

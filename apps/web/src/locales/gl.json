@@ -21,7 +21,11 @@
     "domains": {
       "legal": "Legal",
       "health": "Saúde",
-      "general": "Xeral"
+      "general": "Xeral",
+      "bopv": "BOPV",
+      "boja": "BOJA",
+      "noticias": "Novas",
+      "parliament": "Parlamento"
     },
     "languages": {
       "eu": "Euskera",

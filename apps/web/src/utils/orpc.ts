@@ -6,39 +6,49 @@ import { toast } from "sonner";
 import type { AppRouterClient } from "../../../server/src/routers/index";
 
 export const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			staleTime: 5 * 60 * 1000,
-			refetchOnWindowFocus: false,
-			retry: 1,
-		},
-	},
-	queryCache: new QueryCache({
-		onError: (error) => {
-			const isAuthError = error.message?.toLowerCase().includes("unauthorized") ||
-				error.message?.toLowerCase().includes("401");
-			if (isAuthError) return;
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error) => {
+      // 1. LOGUEAR EL ERROR REAL PARA PODER VERLO
+      console.error('🚨 ORPC Error:', error);
 
-			toast.error("Ha ocurrido un error. Por favor, inténtalo de nuevo.", {
-				action: {
-					label: "Reintentar",
-					onClick: () => {
-						queryClient.invalidateQueries();
-					},
-				},
-			});
-		},
-	}),
+      // 2. Comprobación de Auth mejorada
+      const errorMessage = error.message?.toLowerCase() || '';
+      const isAuthError =
+        errorMessage.includes('unauthorized') ||
+        errorMessage.includes('401') ||
+        errorMessage.includes('unauthenticated') ||
+        errorMessage.includes('session not found');
+
+      if (isAuthError) return;
+
+      toast.error('Ha ocurrido un error. Por favor, inténtalo de nuevo.', {
+        description: error.message,
+        action: {
+          label: 'Reintentar',
+          onClick: () => {
+            queryClient.invalidateQueries();
+          },
+        },
+      });
+    },
+  }),
 });
 
 export const link = new RPCLink({
-	url: `${process.env.NEXT_PUBLIC_SERVER_URL}/rpc`,
-	fetch(url, options) {
-		return fetch(url, {
-			...options,
-			credentials: "include",
-		});
-	},
+  url: 'http://localhost:3000/rpc',
+  fetch(url, options) {
+    return fetch(url, {
+      ...options,
+      credentials: 'include',
+    });
+  },
 });
 
 export const client: AppRouterClient = createORPCClient(link);

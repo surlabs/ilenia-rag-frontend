@@ -11,16 +11,16 @@ export async function getServerClient(): Promise<AppRouterClient> {
 		.join("; ");
 
 	const link = new RPCLink({
-		url: `${process.env.NEXT_PUBLIC_SERVER_URL}/rpc`,
-		fetch(url, options) {
-			return fetch(url, {
-				...options,
-				headers: {
-					Cookie: cookieHeader,
-				},
-			});
-		},
-	});
+  url: 'http://server:3000/rpc',
+  fetch(url, options) {
+    return fetch(url, {
+      ...options,
+      headers: {
+        Cookie: cookieHeader,
+      },
+    });
+  },
+});
 
 	return createORPCClient(link) as AppRouterClient;
 }

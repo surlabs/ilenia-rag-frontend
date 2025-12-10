@@ -3,25 +3,26 @@
     "title": "Zertan lagundu dezaket gaur?",
     "subtitle": "ILENIA Proiektua: Adimen Artifiziala Eleaniztuna",
     "card1": {
-      "title": "Hizkuntza eskubideak",
-      "description": "Euskara administrazioan."
+      "title": "Genero-berdintasuna",
+      "description": "Enpresentzako diru-laguntzak."
     },
     "card2": {
-      "title": "Osasun sistema",
-      "description": "Galiziako SERGAS."
+      "title": "Oliboaren estrategia",
+      "description": "Andaluziako olibo-sektorea."
     },
     "card3": {
-      "title": "Valentziera",
-      "description": "Eskubideak eta kultura."
+      "title": "Memoria demokratikoa",
+      "description": "Museoak eta oroitzapeneko lekuak."
     },
     "card4": {
-      "title": "Ilenia proiektua",
-      "description": "AA eleaniztuna Espainian."
+      "title": "Lehendakariaren eginkizunak",
+      "description": "Valentziako Gorteetako lehendakaria."
     },
     "domains": {
-      "legal": "Legea",
-      "health": "Osasuna",
-      "general": "Orokorra"
+      "bopv": "EHAA",
+      "boja": "BOJA",
+      "noticias": "Albisteak",
+      "parliament": "Parlamentua"
     },
     "languages": {
       "eu": "Euskera",

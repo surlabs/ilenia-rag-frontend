@@ -18,40 +18,40 @@ export type Suggestion = {
 
 export const SUGGESTIONS: Suggestion[] = [
   {
-    key: "eu-legal",
+    key: "eu-bopv",
     badgeColor: "ilenia",
     titleKey: "suggestions.card1.title",
     descriptionKey: "suggestions.card1.description",
     language: "eu",
-    domain: "legal",
-    question: "Zein dira nire hizkuntza eskubideak administrazioan?",
+    domain: "bopv",
+    question: "Zein dira 2025ean enpresetan genero‑berdintasunerako diru‑laguntzen baldintzak eta gehieneko zenbatekoak?",
   },
   {
-    key: "gl-health",
+    key: "es-boja",
     badgeColor: "emerald",
     titleKey: "suggestions.card2.title",
     descriptionKey: "suggestions.card2.description",
-    language: "gl",
-    domain: "health",
-    question: "Como funciona o sistema público de saúde en Galicia?",
+    language: "es",
+    domain: "boja",
+    question: "¿Tiene Andalucía una estrategia para el olivar?",
   },
   {
-    key: "va-general",
+    key: "gl-noticias",
     badgeColor: "ilenia",
     titleKey: "suggestions.card3.title",
     descriptionKey: "suggestions.card3.description",
-    language: "va",
-    domain: "general",
-    question: "Quins són els drets lingüístics dels valencians?",
+    language: "gl",
+    domain: "noticias",
+    question: "Cal é a situación dos museos galegos no relativo á memoria democrática?",
   },
   {
-    key: "es-general",
+    key: "va-parliament",
     badgeColor: "emerald",
     titleKey: "suggestions.card4.title",
     descriptionKey: "suggestions.card4.description",
-    language: "es",
-    domain: "general",
-    question: "¿Qué es el proyecto Ilenia y cuáles son sus objetivos?",
+    language: "va",
+    domain: "parliament",
+    question: "Quines són les funcions del president del parlament?",
   },
 ];
 
@@ -74,7 +74,7 @@ export const SuggestionsPanel = ({
       )}
       {...props}
     >
-      <div className="flex items-center max-w-4xl mb-8 dark:bg-white rounded-xl">
+      <div className="flex items-center w-[40vw] mb-3 dark:bg-white rounded-xl">
         <img src="https://i.imgur.com/uBycidg.png" className="w-full" alt="Banners" />
       </div>
       <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 border border-slate-100 dark:border-slate-700">

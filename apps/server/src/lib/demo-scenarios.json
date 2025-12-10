@@ -1,111 +1,119 @@
 [
   {
+    "language": "eu",
+    "domain": "bopv",
+    "response": "Enpresek, entitate pribatuek, kooperatibek eta irabazi-asmorik gabeko entitateek 2025ean genero-berdintasunerako diru-laguntzak eskatzeko baldintzak eta gehieneko zenbatekoak honako hauek dira:\n\n- Baldintzak: entitateek ezin dute izan ezarrita sexu-diskriminazioagatik administrazio-zehapen edo zehapen penal irmorik, ezta gizarte-arloko arau-hauste larri edo oso larriren batengatik ere. Era berean, ezin izango dute laguntzarik edo diru-laguntzarik jaso Estatuko araudiaren arabera berdintasun-plana indarrean izan behar duten enpresek, halakorik ez badute, ezta sexu-jazarpenari edo sexuan oinarritutako jazarpenari aurre hartzeko eta aurka egiteko neurriak ezarri izana egiaztatzen ez duten 50 langiletik gorako enpresek ere, emakumeen eta gizonen berdintasunaren arloan Estatuko legeriak ezarritakoaren arabera.\n\n- Gehieneko zenbatekoa: dirulaguntzaren zenbatekoa diruz lagundu nahi den jardueraren kostuaren % 50 izango da, gehienez ere; eta onuradun bakoitzeko, 12.000 eurokoa, gehienez ere. Gehienez ere % 80ra mugatuko da, 12.000 euroko mugarekin, irabazi-asmorik gabeko entitateentzat, baldin eta entitateen titularren edo partaideen artean mozkinak banatzen ez badira, baizik eta ondasun eta zerbitzuen ekoizpen edo banaketatik lortutako soberakina edo irabazia inbertitzen bada edo entitate horien helburuak betetzeko erabiltzen bada.",
+    "contexts": [
+      {
+        "id": "doc-eu-bopv-1",
+        "title": "AGINDUA, 2025eko martxoaren 18koa, Elikadura, Landa Garapen, Nekazaritza eta Arrantzako sailburuarena",
+        "passage": "Nekazaritzako eta elikagaigintzako produktuen kalitate-araubideetarako 2025eko ekitaldirako laguntzen deialdiko oinarriak onartzeko dena.",
+        "url": "https://www.legegunea.euskadi.eus/webleg00-contfich/eu/contenidos/orden/bopv202501676/eu_def/index.shtml"
+      },
+      {
+        "id": "doc-eu-bopv-2",
+        "title": "EBAZPENA, 2025eko otsailaren 18koa, Emakunde-Emakumearen Euskal Erakundearen zuzendariarena",
+        "passage": "2025. urtean enpresei, entitate pribatuei, kooperatibei eta irabazi asmorik gabeko entitateei dirulaguntzak emateko deialdia egiten baitzaie aholkularitza-enpresa homologatu bat kontrata dezaten emakume eta gizonen arteko berdintasunari buruzko diagnostikoak eta berdintasun-planak egiteko.",
+        "url": "https://www.legegunea.euskadi.eus/webleg00-contfich/eu/contenidos/resolucion/bopv202500913/eu_def/index.shtml"
+      },
+      {
+        "id": "doc-eu-bopv-3",
+        "title": "EBAZPENA, 2025eko otsailaren 18koa, Emakunde-Emakumearen Euskal Erakundearen zuzendariarena",
+        "passage": "Emakumeen aurkako indarkeria-portaerei buruzko sentsibilizazio- eta prebentzio-jarduerak bultzatzen eta sustatzen dituzten erakunde, elkarte eta fundazioei 2025ean dirulaguntzak emateko deialdia egin eta dirulaguntza horien oinarriak arautzen dituena.",
+        "url": "https://www.legegunea.euskadi.eus/webleg00-contfich/eu/contenidos/resolucion/bopv202500912/eu_def/index.shtml"
+      },
+      {
+        "id": "doc-eu-bopv-4",
+        "title": "AGINDUA, 2024ko azaroaren 19koa, Jaurlaritzako Lehenengo lehendakariorde eta Kultura eta Hizkuntza Politikako sailburuarena",
+        "passage": "Deialdia egiten baita 2025. urtean Kultura-sorkuntza artistikoa babesten eta sustatzen duten kultura-gune independenteentzako dirulaguntzak emateko (Sorgune).",
+        "url": "https://www.legegunea.euskadi.eus/webleg00-contfich/eu/contenidos/orden/bopv202405622/eu_def/index.shtml"
+      }
+    ]
+  },
+  {
     "language": "es",
-    "domain": "general",
-    "response": "### Aspectos Clave del Proyecto Ilenia\n\nEl proyecto Ilenia representa un avance significativo en la democratización del acceso a la inteligencia artificial en las lenguas cooficiales de España. Sus objetivos principales incluyen:\n\n1.  **Preservación Digital:** Asegurar que el euskera, gallego, catalán y valenciano tengan una representación robusta en los modelos de lenguaje de última generación.\n2.  **Soberanía Tecnológica:** Reducir la dependencia de modelos propietarios entrenados principalmente en inglés, fomentando el desarrollo de infraestructuras locales.\n3.  **Accesibilidad Administrativa:** Facilitar que los ciudadanos interactúen con la administración pública en su lengua materna de forma natural y fluida.\n\nAdemás, el sistema integra capacidades de *Retrieval-Augmented Generation* (RAG), lo que permite verificar cada afirmación con documentos oficiales, garantizando transparencia y trazabilidad en las respuestas.",
+    "domain": "boja",
+    "response": "Sí, Andalucía tiene una estrategia para el olivar. Según el Doc 5, se acuerda la formulación de la Primera Estrategia Andaluza para el Sector del Olivar 2023-2027.",
     "contexts": [
       {
-        "id": "doc-es-1",
-        "title": "Introducción a Ilenia",
-        "passage": "Ilenia es un proyecto de inteligencia artificial para la administración pública cuyo fin es impulsar la tecnología del lenguaje en las lenguas de España.",
-        "url": "https://ilenia.ia/intro",
-        "timestamp": "2023-05-12T10:00:00Z",
-        "metadata": { "type": "official", "relevance": 0.98 }
+        "id": "doc-es-boja-1",
+        "title": "Boletin_Oficial_Junta_Andalucia-BOJA-2021-Boletin-58-Seccion-1-Decreto-3-1141631",
+        "passage": "Decreto sobre la estrategia andaluza para el sector del olivar.",
+        "url": "https://www.juntadeandalucia.es/boja"
       },
       {
-        "id": "doc-es-2",
-        "title": "Guía de Usuario",
-        "passage": "Para usar el chat, seleccione el idioma deseado en la cabecera y escriba su pregunta en el cuadro de texto inferior. El sistema buscará en la base de conocimiento relevante.",
-        "timestamp": "2025-01-01T10:00:00Z",
-        "url": "https://ilenia.ia/docs/guide",
-        "metadata": { "type": "manual", "version": "2.0" }
-      }
-    ]
-  },
-  {
-    "language": "eu",
-    "domain": null,
-    "response": "### Euskararen Garrantzia Aro Digitalean\n\nTeknologia berriek aukera paregabea eskaintzen dute hizkuntza gutxituen biziberritze prozesuan. Ilenia proiektuak ardatz hauek ditu:\n\n*   **Corpusean oinarritutako ereduak:** Euskarazko testu-masa handiak erabiliz trebatutako ereduak, hizkuntzaren morfologia eta sintaxi aberatsa ulertzeko gai direnak.\n*   **Administrazio Publikoa:** Herritarrek euskarazko zerbitzu digital aurreratuak jasotzeko duten eskubidea bermatzea.\n*   **Berrikuntza ekosistema:** Unibertsitateen eta zentro teknologikoen arteko lankidetza sustatzea (Hitz Zentroa, adibidez).",
-    "contexts": [
-      {
-        "id": "doc-eu-1",
-        "title": "Euskararen Erabilera Plan Estrategikoa",
-        "passage": "Administrazioan euskararen erabilera sustatzeko planak lehentasuna ematen dio tresna digitalen garapenari eta herritarrekiko harreman telematikoari."
-      }
-    ]
-  },
-  {
-    "language": "eu",
-    "domain": "legal",
-    "response": "### Hizkuntza Eskubideak Administrazioan\n\nEuskal Autonomia Erkidegoko Administrazio Publikoaren esparruan, hizkuntza-eskubideak bermatzeko hainbat arau daude indarrean:\n\n1.  **Euskararen Erabilera Normalizatzeko Oinarrizko Legea (10/1982):** Lege honek ezartzen du herritarrek eskubidea dutela administrazioarekin harremanak euskaraz edo gaztelaniaz izateko, eta administrazioak bermatu behar duela eskubide hori.\n2.  **Kontsumitzaileen eta Erabiltzaileen Estatutua:** Produktu eta zerbitzuen informazioa bi hizkuntza ofizialetan egotea sustatzen du.\n\nHerritarrek eskubidea dute administrazio publikoarekin euskaraz harremanetan jartzeko, eta administrazioak bermatu behar du zerbitzu hori.",
-    "contexts": [
-      {
-        "id": "doc-eu-legal-1",
-        "title": "10/1982 Legea, Euskararen Erabilera Normalizatzekoa",
-        "passage": "Herritar guztiek dute hizkuntza ofizialak ezagutzeko eta erabiltzeko eskubidea.",
-        "url": "https://www.euskadi.eus/legea/10-1982",
-        "timestamp": "1982-11-24T00:00:00Z",
-        "metadata": { "type": "legislation", "jurisdiction": "Euskadi" }
+        "id": "doc-es-boja-2",
+        "title": "Boletin_Oficial_Junta_Andalucia-BOJA-2023-Boletin-34-Seccion-1-Decreto-5-566381",
+        "passage": "Formulación de la Primera Estrategia Andaluza para el Sector del Olivar 2023-2027.",
+        "url": "https://www.juntadeandalucia.es/boja"
       },
       {
-        "id": "doc-eu-legal-2",
-        "title": "Euskal Funtzio Publikoaren Legea",
-        "passage": "Funtzionarioek gaitasun nahikoa izan behar dute bi hizkuntza ofizialetan zerbitzua emateko, lanpostuaren perfilaren arabera.",
-        "url": "https://www.euskadi.eus/legea/funtzio-publikoa",
-        "timestamp": "1989-07-06T00:00:00Z",
-        "metadata": { "type": "legislation", "status": "active" }
+        "id": "doc-es-boja-3",
+        "title": "Boletin_Oficial_Junta_Andalucia-BOJA-2024-Boletin-197-Seccion-1-Decreto-3-1258111",
+        "passage": "Desarrollo de medidas para el sector del olivar en Andalucía.",
+        "url": "https://www.juntadeandalucia.es/boja"
+      },
+      {
+        "id": "doc-es-boja-4",
+        "title": "Boletin_Oficial_Junta_Andalucia-BOJA-2021-Boletin-127-Seccion-1-Decreto-1-653573",
+        "passage": "Normativa relacionada con el sector agrícola andaluz.",
+        "url": "https://www.juntadeandalucia.es/boja"
+      },
+      {
+        "id": "doc-es-boja-5",
+        "title": "Boletin_Oficial_Junta_Andalucia-BOJA-2023-Boletin-43-Seccion-1-Decreto-3-717352",
+        "passage": "Políticas de apoyo al olivar en la comunidad autónoma.",
+        "url": "https://www.juntadeandalucia.es/boja"
       }
     ]
-  },
-  {
-    "language": null,
-    "domain": "legal",
-    "response": "### Principios Generales del Derecho Administrativo\n\nEl derecho administrativo regula la organización, funcionamiento, poderes y deberes de la Administración pública. Algunos de sus principios rectores incluyen:\n\n*   **Principio de Legalidad:** La administración debe actuar con sometimiento pleno a la ley y al Derecho.\n*   **Principio de Eficacia:** La actuación administrativa debe lograr los objetivos previstos de la manera más eficiente posible.\n*   **Principio de Transparencia:** Los ciudadanos tienen derecho a acceder a la información pública y conocer los motivos de las decisiones administrativas.",
-    "contexts": []
   },
   {
     "language": "gl",
-    "domain": "health",
-    "response": "### O Sistema Público de Saúde de Galicia\n\nO Servizo Galego de Saúde (SERGAS) é a estrutura organizativa encargada da xestión dos servizos sanitarios de carácter público na Comunidade Autónoma de Galicia. Os seus piares fundamentais son:\n\n1.  **Universalidade:** Cobertura sanitaria para toda a poboación residente.\n2.  **Equidade:** Acceso igualitario aos servizos independentemente do lugar de residencia ou recursos económicos.\n3.  **Calidade:** Busca da excelencia na atención mediante a formación continua e a tecnoloxía.\n\nRecentemente, a dixitalización xogou un papel clave a través da historia clínica electrónica (IANUS) e a receita electrónica, mellorando a coordinación entre atención primaria e hospitalaria.",
+    "domain": "noticias",
+    "response": "Na actualidade, non hai ningún espazo en Galicia cualificado oficialmente como de \"memoria democrática\". A iniciativa galega pola memoria propón declarar a illa San Simón e o pazo de Meirás como lugares de \"lembranza democrática\" por destacar como símbolos na loita pola memoria e contra a impunidade do franquismo.",
     "contexts": [
       {
-        "id": "doc-gl-1",
-        "title": "Servizo Galego de Saúde (SERGAS)",
-        "passage": "O SERGAS é o organismo autónomo de carácter administrativo adscrito á Consellería de Sanidade responsable da asistencia sanitaria pública.",
-        "url": "https://sergas.gal",
-        "timestamp": "2023-09-15T08:00:00Z",
-        "metadata": { "type": "entity_description" }
+        "id": "doc-gl-noticias-1",
+        "title": "Colectivos memorialísticos urxen a declarar San Simón e Meirás como lugares da memoria",
+        "passage": "A iniciativa galega pola memoria propón declarar a illa San Simón e o pazo de Meirás como lugares de lembranza democrática.",
+        "url": "https://www.nosdiario.gal/articulo/cultura/-/20240717205747202697.html"
       },
       {
-        "id": "doc-gl-2",
-        "title": "Lei de Saúde de Galicia",
-        "passage": "Esta lei ten por obxecto a regulación xeral das actuacións que permitan facer efectivo o dereito á protección da saúde.",
-        "url": "https://xunta.gal/lei-saude",
-        "timestamp": "2008-05-30T00:00:00Z",
-        "metadata": { "type": "legislation" }
+        "id": "doc-gl-noticias-2",
+        "title": "Balas perdidas para a memoria",
+        "passage": "Análise sobre a situación da memoria democrática en Galicia e os seus desafíos.",
+        "url": "https://www.nosdiario.gal/articulo/cultura/-/20240510153504197481.html"
+      },
+      {
+        "id": "doc-gl-noticias-3",
+        "title": "Besteiro insta Rueda a incluír a memoria democrática nos Orzamentos",
+        "passage": "Non hai reparación no esquecemento, afirma Besteiro ao instar á inclusión da memoria democrática nos orzamentos.",
+        "url": "https://www.nosdiario.gal/articulo/politica/-/20241104154528209995.html"
+      },
+      {
+        "id": "doc-gl-noticias-4",
+        "title": "As familias toman a palabra",
+        "passage": "Testemuños de familias afectadas pola represión franquista e a súa loita pola memoria.",
+        "url": "https://www.nosdiario.gal/articulo/cultura/-/20240815115310204851.html"
       }
     ]
   },
   {
     "language": "va",
-    "domain": "general",
-    "response": "### La Cultura i la Llengua Valenciana\n\nEl valencià és una part fonamental de la identitat cultural de la Comunitat Valenciana. La Generalitat promou el seu ús en tots els àmbits de la vida social:\n\n*   **Educació:** Un sistema educatiu que garanteix el coneixement de les dues llengües oficials.\n*   **Mitjans de Comunicació:** La ràdio i televisió públiques com a eina de normalització lingüística.\n*   **Administració:** El dret dels ciutadans a dirigir-se a les institucions en valencià.\n\nEls ciutadans tenen dret a utilitzar el valencià en les seues relacions amb l'administració pública, i aquesta ha de garantir l'atenció en ambdues llengües oficials.",
+    "domain": "parliament",
+    "response": "El president del parlament, conegut com el President de les Corts en el context de la Comunitat Valenciana, té diverses funcions clau per assegurar el bon funcionament de la institució. Algunes de les seues funcions principals inclouen:\n\n1. **Direcció dels Debats**: El president dirigeix els debats que es duen a terme a l'hemicicle, assegurant que es desenvolupen de manera ordenada i respectant els temps assignats a cada intervenció.\n\n2. **Garanteix l'Ordre**: És responsable de mantenir l'ordre durant les sessions plenàries i altres reunions parlamentàries, intervenint quan siga necessari per evitar interrupcions o desordres.\n\n3. **Representació Institucional**: Actua com a màxima autoritat i representant de les Corts Valencianes en actes oficials i davant d'altres institucions.\n\n4. **Convocatòria de Sessions**: Decideix sobre la convocatòria de les sessions plenàries i altres reunions, d'acord amb el reglament i les necessitats del parlament.\n\n5. **Resolució de Conflictes**: Pot intervenir per resoldre conflictes o desacords que puguen sorgir entre els membres del parlament durant les sessions.\n\nAquestes funcions són essencials per garantir que el parlament funcione de manera eficient i democràtica, permetent que es prenguen decisions importants per a la comunitat.",
     "contexts": [
       {
-        "id": "doc-va-1",
-        "title": "Estatut d'Autonomia de la Comunitat Valenciana",
-        "passage": "La Comunitat Valenciana té com a llengües oficials el valencià i el castellà. Tothom té dret a conéixer-les i a usar-les.",
-        "url": "https://gva.es/estatut",
-        "timestamp": "2006-04-10T00:00:00Z",
-        "metadata": { "type": "legislation", "region": "Comunitat Valenciana" }
+        "id": "doc-va-parliament-1",
+        "title": "Funcions del President",
+        "passage": "El President de les Corts exerceix la direcció dels debats i garanteix l'ordre a l'hemicicle.",
+        "url": "https://www.cortsvalencianes.es/"
       },
       {
-        "id": "doc-va-2",
-        "title": "Llei d'Ús i Ensenyament del Valencià",
-        "passage": "L'administració ha de garantir l'ús normal i oficial del valencià, sense discriminació per raó de la llengua.",
-        "url": "https://gva.es/llei-us",
-        "timestamp": "1983-11-23T00:00:00Z",
-        "metadata": { "type": "legislation" }
+        "id": "doc-va-parliament-2",
+        "title": "Plens",
+        "passage": "Les sessions plenàries se celebren amb caràcter ordinari cada setmana.",
+        "url": "https://www.cortsvalencianes.es/"
       }
     ]
   }

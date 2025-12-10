@@ -3,25 +3,26 @@
     "title": "¿En qué puedo ayudarte hoy?",
     "subtitle": "Proyecto ILENIA: Inteligencia Artificial Multilingüe",
     "card1": {
-      "title": "Derechos lingüísticos",
-      "description": "Uso del euskera en la administración."
+      "title": "Ayudas de igualdad",
+      "description": "Subvenciones de género en empresas."
     },
     "card2": {
-      "title": "Sistema de salud",
-      "description": "El SERGAS en Galicia."
+      "title": "Estrategia del olivar",
+      "description": "Sector del olivar en Andalucía."
     },
     "card3": {
-      "title": "Lengua valenciana",
-      "description": "Derechos y cultura."
+      "title": "Memoria democrática",
+      "description": "Museos y lugares de memoria."
     },
     "card4": {
-      "title": "Proyecto Ilenia",
-      "description": "IA multilingüe en España."
+      "title": "Funciones del presidente",
+      "description": "Presidente de las Corts Valencianes."
     },
     "domains": {
-      "legal": "Legal",
-      "health": "Salud",
-      "general": "General"
+      "bopv": "BOPV",
+      "boja": "BOJA",
+      "noticias": "Noticias",
+      "parliament": "Parlamento"
     },
     "languages": {
       "eu": "Euskera",

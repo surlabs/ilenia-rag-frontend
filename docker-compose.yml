@@ -40,7 +40,7 @@ services:
       - "3000:3000"
     env_file:
       - ./.env
-    #command: sh -c "npx run db:migrate && npx start"
+    command: sh -c "npm run db:migrate && npm run start"
     networks:
       - ilenia-net
 

@@ -1,10 +1,8 @@
 import { logger } from './logger';
 
 const isDev = process.env.NODE_ENV !== 'production';
-if (isDev) {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-  logger.warn('Development mode: TLS certificate verification is disabled');
-}
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+logger.warn('Development mode: TLS certificate verification is disabled');
 
 declare global {
   // eslint-disable-next-line no-var
@@ -20,7 +18,8 @@ export type RagServerConfig = {
 
 class RagConfigService {
   private servers: RagServerConfig[] = [];
-  private credentialsMap: Map<string, { user: string; password: string }> = new Map();
+  private credentialsMap: Map<string, { user: string; password: string }> =
+    new Map();
   private masterUrl: string = '';
   private initialized = false;
 
@@ -33,8 +32,11 @@ class RagConfigService {
     const credentialsEnv = process.env.RAG_SERVER_CREDENTIALS || '';
     const masterUrl = process.env.RAG_MASTER_URL || '';
 
-    const serverUrls = serversEnv.split(',').map(s => s.trim()).filter(Boolean);
-    const credentials = credentialsEnv.split(',').map(c => c.trim());
+    const serverUrls = serversEnv
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const credentials = credentialsEnv.split(',').map((c) => c.trim());
 
     if (serverUrls.length === 0) {
       throw new Error('RAG_SERVERS is required when RAG_PROVIDER=real');
@@ -95,9 +97,7 @@ class RagConfigService {
   private parseCredentials(credentialString: string): [string, string] {
     const colonIndex = credentialString.indexOf(':');
     if (colonIndex === -1) {
-      throw new Error(
-        'Invalid credential format. Expected user:password'
-      );
+      throw new Error('Invalid credential format. Expected user:password');
     }
     const user = credentialString.slice(0, colonIndex);
     const password = credentialString.slice(colonIndex + 1);
@@ -111,7 +111,9 @@ class RagConfigService {
       return {};
     }
 
-    const encoded = Buffer.from(`${creds.user}:${creds.password}`).toString('base64');
+    const encoded = Buffer.from(`${creds.user}:${creds.password}`).toString(
+      'base64'
+    );
     return { Authorization: `Basic ${encoded}` };
   }
 
@@ -120,7 +122,7 @@ class RagConfigService {
   }
 
   getServerUrls(): string[] {
-    return this.servers.map(s => s.url);
+    return this.servers.map((s) => s.url);
   }
 
   isInitialized(): boolean {

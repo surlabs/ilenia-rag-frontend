@@ -74,6 +74,9 @@ export const SuggestionsPanel = ({
       )}
       {...props}
     >
+      <div className="flex items-center max-w-4xl mb-8 dark:bg-white rounded-xl">
+        <img src="https://i.imgur.com/uBycidg.png" className="w-full" alt="Banners" />
+      </div>
       <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 border border-slate-100 dark:border-slate-700">
         <Sparkles className="w-8 h-8 text-ilenia" />
       </div>

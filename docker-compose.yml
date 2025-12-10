@@ -17,7 +17,7 @@ services:
     volumes:
       - ilenia_db_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3326:3306"
     networks:
       - ilenia-net
     healthcheck:

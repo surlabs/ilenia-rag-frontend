@@ -42,7 +42,7 @@ export const queryClient = new QueryClient({
 });
 
 export const link = new RPCLink({
-  url: 'http://localhost:3000/rpc',
+  url: `${process.env.NEXT_PUBLIC_SERVER_URL || ''}/rpc`,
   fetch(url, options) {
     return fetch(url, {
       ...options,
